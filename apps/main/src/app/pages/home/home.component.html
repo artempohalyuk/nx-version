@@ -1,0 +1,33 @@
+<div class="home-page p-4">
+  <div class="container mx-auto text-white">
+    <div class="flex flex-wrap">
+      <div class="w-3/4 p-4">
+        <h1 class="text-4xl font-bold mb-4">Welcome!</h1>
+
+        <ng-container *ngIf="userTeamLoading$ | async; else userTeamTemplate">
+          <div class="flex ml-16 mt-8">
+            <mat-spinner
+                color="accent"
+                [diameter]="40">
+            </mat-spinner>
+          </div>
+        </ng-container>
+
+        <ng-template #userTeamTemplate>
+          <ng-container *ngIf="userTeam$ | async; else createNewTeamTemplate">
+            <p class="text-lg mb-4">Continue manage your team.</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="onManageClick()">Manage</button>
+          </ng-container>
+  
+          <ng-template #createNewTeamTemplate>
+            <p class="text-lg mb-4">Here you can create your own team and stay updated with the latest sports news.</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="onCreateNewTeam()">Create Team</button>
+          </ng-template>
+        </ng-template>
+      </div>
+      <div class="w-1/4 p-4">
+        <app-sidebar-news [newsLoading]="newsLoading$ | async" [newsList]="newsList$ | async"></app-sidebar-news>
+      </div>
+    </div>
+  </div>
+</div>

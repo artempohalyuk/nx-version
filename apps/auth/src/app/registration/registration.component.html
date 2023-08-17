@@ -1,0 +1,72 @@
+<div class="w-full h-screen flex justify-center items-center signup-page bg-[url('^assets/auth/sign-up-bg.jpg')]">
+  <div class="w-1/2 h-2/3 shadow-lg rounded-md bg-white p-8 flex flex-col">
+    <h2 class="text-center font-medium text-2xl mb-4">
+      Sign Up
+    </h2>
+    <div class="flex flex-1 flex-col justify-evenly">
+      <div class='relative'>
+        <input
+          class="w-full border-2 outline-none p-2 rounded-md"
+          [class.border-red-500]="errors && errors.firstName"
+          type="email"
+          placeholder="First Name"
+          [(ngModel)]="firstName"
+        />
+        <p *ngIf="errors && errors.firstName" class="absolute mt-2 text-red-500 text-sm">
+          {{errors.firstName.message}}
+        </p>
+      </div>
+      <div class='relative'>
+        <input
+          class="w-full border-2 outline-none p-2 rounded-md"
+          [class.border-red-500]="errors && errors.lastName"
+          type="email"
+          placeholder="Last Name"
+          [(ngModel)]="lastName"
+        />
+        <p *ngIf="errors && errors.lastName" class="absolute mt-2 text-red-500 text-sm">
+          {{errors.lastName.message}}
+        </p>
+      </div>
+      <div class='relative'>
+        <input
+          class="w-full border-2 outline-none p-2 rounded-md"
+          [class.border-red-500]="errors && errors.email"
+          type="email"
+          placeholder="Enter Your Email"
+          [(ngModel)]="email"
+        />
+        <p *ngIf="errors && errors.email" class="absolute mt-2 text-red-500 text-sm">
+          {{errors.email.message}}
+        </p>
+      </div>
+      <div class='relative'>
+        <input
+          class="w-full border-2 outline-none p-2 rounded-md"
+          [class.border-red-500]="errors && errors.password"
+          type="password"
+          placeholder="*******"
+          [(ngModel)]="password"
+        />
+        <p *ngIf="errors && errors.password" class="absolute mt-2 text-red-500 text-sm">
+          {{errors.password.message}}
+        </p>
+      </div>
+
+      <button class="flex justify-center p-2 rounded-md w-1/2 self-center bg-gray-800  text-white hover:bg-gray-700"
+        (click)="onSignUp()"
+      >
+        <div *ngIf="isLoading" class="mr-2 w-5 h-5 border-l-2 rounded-full animate-spin"></div>
+        <span>
+          SIGN UP
+        </span>
+      </button>
+    </div>
+    <div class="text-center text-sm">
+      Already a User?
+      <button type="button" routerLink="../login" class="font-medium text-gray-800 ml-1">
+        Sign In
+      </button>
+    </div>
+  </div>
+</div>

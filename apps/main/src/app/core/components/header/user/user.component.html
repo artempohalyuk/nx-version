@@ -1,0 +1,15 @@
+<ng-container *ngIf="user$ | async as user">
+  <div class="relative inline-block ml-10">
+    <p class="text-white peer hover:text-gray-300">
+      Welcome, {{ user.firstName }} {{ user.lastName }}
+    </p>
+
+    <div class="hidden peer-hover:block hover:block absolute right-0 p-2 w-[150px]">
+      <div class="bg-white border border-gray-300 rounded shadow text-right -mx-2">
+        <a (click)="logOut()" class="text-gray-800 hover:text-blue-500 cursor-pointer block py-2 px-4 ">Log out</a>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+

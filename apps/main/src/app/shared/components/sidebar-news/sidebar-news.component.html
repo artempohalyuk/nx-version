@@ -1,0 +1,17 @@
+<h2 class="text-2xl font-bold mb-4">Latest news</h2>
+
+<ng-container *ngIf="newsLoading; else newListTemplate">
+    <div class="flex justify-center">
+        <mat-spinner
+            color="accent"
+            [diameter]="40">
+        </mat-spinner>
+    </div>
+</ng-container>
+
+<ng-template #newListTemplate>
+    <div *ngFor="let news of newsList" class="mb-4">
+        <app-sidebar-news-item [news]="news"></app-sidebar-news-item>
+    </div>
+</ng-template>
+

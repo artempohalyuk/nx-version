@@ -1,0 +1,5 @@
+<div class="flex flex-col">
+    <p class="text-xs">{{ news.originalSource }}</p>
+    <h4 class="text-lg font-bold mb-1">{{ news.title }}</h4>
+    <a [routerLink]="['/news', news.newsID]" class="text-xs self-end">Read more</a>
+</div>

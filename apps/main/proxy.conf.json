@@ -1,0 +1,6 @@
+{
+    "/assets/auth":{
+        "target": "http://localhost:4201",
+        "secure": false
+    }
+}
