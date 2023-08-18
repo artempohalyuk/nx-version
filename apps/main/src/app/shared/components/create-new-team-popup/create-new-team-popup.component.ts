@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -12,8 +12,9 @@ import { BaseComponent } from '../base';
 import { AuthService } from 'src/app/services';
 import { IUser } from '../../models/user.model';
 @Component({
-  selector: 'app-create-new-team-popup',
+  selector: 'nx-create-new-team-popup',
   templateUrl: './create-new-team-popup.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
@@ -31,7 +32,7 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
     private _actions: Actions,
     private _fb: FormBuilder,
     private _dialogRef: MatDialogRef<CreateNewTeamPopupComponent>,
-    private _authService: AuthService
+    private _authService: AuthService,
   ) {
     super();
   }
@@ -62,6 +63,7 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
 
     if (!formValue.name) {
       this.errorMessage = "Team Name is required.";
+      return;
     }
   
     this._actions.dispatch(createUserTeam(formValue.name));

@@ -16,7 +16,7 @@ import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from '
 
 
 @Component({
-  selector: 'app-management',
+  selector: 'nx-management',
   templateUrl: './management.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -43,9 +43,9 @@ import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from '
   `]
 })
 export class ManagementComponent implements OnInit {
-  currentPage: number = 1;
+  currentPage = 1;
   searchTerm!: string;
-  selectedPosition: string = '';
+  selectedPosition = '';
   userTeam!: IUserTeam;
   activePlayers$: Observable<IPlayer[] | null> = this._appRepository.activePlayers$.pipe(map((res) => res?.data ?? null));
   activePlayersLoading$: Observable<boolean> = this._appRepository.activePlayers$.pipe(map((res) => res?.loading ?? false));

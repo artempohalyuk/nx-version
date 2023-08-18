@@ -11,7 +11,7 @@ import { AppRepository, loadNews } from 'src/app/store';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-news',
+  selector: 'nx-news',
   templateUrl: './news.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -31,7 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   `]
 })
 export class NewsComponent implements OnInit {
-  p: number = 1;
+  p = 1;
   newsList$: Observable<INews[] | null> = this._appRepository.news$.pipe(map((res) => res?.data ?? null));
   newsLoader$: Observable<boolean> = this._appRepository.news$.pipe(map((res) => res?.loading ?? false));
 

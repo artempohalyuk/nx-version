@@ -13,7 +13,7 @@ import { AppRepository, loadNews, loadUserTeam } from 'src/app/store';
 import { AuthService } from 'src/app/services';
 
 @Component({
-  selector: 'app-home',
+  selector: 'nx-home',
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,

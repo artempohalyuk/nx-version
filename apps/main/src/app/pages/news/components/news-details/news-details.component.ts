@@ -9,7 +9,7 @@ import { INews } from '@models';
 import { AppRepository, loadNewsDetails } from 'src/app/store';
 
 @Component({
-  selector: 'app-news-details',
+  selector: 'nx-news-details',
   templateUrl: './news-details.component.html',
   standalone: true,
   imports: [CommonModule],
