@@ -48,7 +48,6 @@ export class AuthService {
   
     logout(): void {
       this.clear();
-      // window.location.href = `${environment.authUrl}/logout`;
       this._router.navigate(['/auth']);
     }
   

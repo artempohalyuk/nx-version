@@ -1,36 +1,55 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../service';
 
 @Component({
   selector: 'nx-login',
   templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [FormsModule, NgIf, RouterModule]
+  imports: [ReactiveFormsModule, NgIf, RouterModule]
 })
 export class LoginComponent {
-  email!: string;
-  password!: string;
-  errors!: { email: string, password: string };
+  loginForm: FormGroup = this._fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
+  errors!: { email: string, password: string } | null;
   isLoading!: boolean;
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
 
   constructor(
     private _authService: AuthService,
-    private _router: Router
+    private _router: Router,
+    private _fb: FormBuilder,
+    private _cdr: ChangeDetectorRef
   ) {}
 
   onSignIn(): void {
-    this.isLoading = true;
+    if (!this.loginForm.valid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
-    this._authService.login({ email: this.email, password: this.password }).subscribe(
+    this.isLoading = true;
+    
+    this._authService.login(this.loginForm.value).subscribe(
       (response) => {
         localStorage.setItem('token', response.token);
         this._router.navigate(['/']);
       }, (errorResponse) => {
         this.errors = errorResponse && errorResponse.error && errorResponse.error.error.payload;
         this.isLoading = false;
+        this._cdr.markForCheck();
       }
     )
   }

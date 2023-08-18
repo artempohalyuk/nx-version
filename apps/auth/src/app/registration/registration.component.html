@@ -3,53 +3,85 @@
     <h2 class="text-center font-medium text-2xl mb-4">
       Sign Up
     </h2>
-    <div class="flex flex-1 flex-col justify-evenly">
+    <form class="flex flex-1 flex-col justify-evenly" [formGroup]="registrationForm">
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="errors && errors.firstName"
-          type="email"
+          [class.border-red-500]="(firstName?.invalid || errors?.firstName) && (firstName?.dirty || firstName?.touched)"
+          type="text"
           placeholder="First Name"
-          [(ngModel)]="firstName"
+          formControlName="firstName"
         />
-        <p *ngIf="errors && errors.firstName" class="absolute mt-2 text-red-500 text-sm">
-          {{errors.firstName.message}}
+        <p *ngIf="(firstName?.invalid || errors?.firstName) && (firstName?.dirty || firstName?.touched)"
+          class="absolute mt-2 text-red-500 text-sm">
+          <ng-container *ngIf="firstName?.errors?.['required']">
+            Firstname is required.
+          </ng-container>
+
+          <ng-container *ngIf="errors?.firstName">
+            {{ errors?.firstName?.message }}
+          </ng-container>
         </p>
       </div>
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="errors && errors.lastName"
-          type="email"
+          [class.border-red-500]="(lastName?.invalid || errors?.lastName) && (lastName?.dirty || lastName?.touched)"
+          type="text"
           placeholder="Last Name"
-          [(ngModel)]="lastName"
+          formControlName="lastName"
         />
-        <p *ngIf="errors && errors.lastName" class="absolute mt-2 text-red-500 text-sm">
-          {{errors.lastName.message}}
+        <p *ngIf="(lastName?.invalid || errors?.lastName) && (lastName?.dirty || lastName?.touched)"
+          class="absolute mt-2 text-red-500 text-sm">
+          <ng-container *ngIf="lastName?.errors?.['required']">
+            Lastname is required.
+          </ng-container>
+
+          <ng-container *ngIf="errors?.lastName">
+            {{ errors?.lastName?.message }}
+          </ng-container>
         </p>
       </div>
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="errors && errors.email"
+          [class.border-red-500]="(email?.invalid || errors?.email) && (email?.dirty || email?.touched)"
           type="email"
           placeholder="Enter Your Email"
-          [(ngModel)]="email"
+          formControlName="email"
         />
-        <p *ngIf="errors && errors.email" class="absolute mt-2 text-red-500 text-sm">
-          {{errors.email.message}}
+        <p *ngIf="(email?.invalid || errors?.email) && (email?.dirty || email?.touched)"
+          class="absolute mt-2 text-red-500 text-sm">
+          <ng-container *ngIf="email?.errors?.['required']">
+            Email is required.
+          </ng-container>
+
+          <ng-container *ngIf="email?.errors?.['email']">
+            Please enter a valid email address.
+          </ng-container>
+
+          <ng-container *ngIf="errors?.email">
+            {{ errors?.email?.message }}
+          </ng-container>
         </p>
       </div>
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="errors && errors.password"
+          [class.border-red-500]="(password?.invalid || errors?.password) && (password?.dirty || password?.touched)"
           type="password"
           placeholder="*******"
-          [(ngModel)]="password"
+          formControlName="password"
         />
-        <p *ngIf="errors && errors.password" class="absolute mt-2 text-red-500 text-sm">
-          {{errors.password.message}}
+        <p *ngIf="(password?.invalid || errors?.password) && (password?.dirty || password?.touched)"
+          class="absolute mt-2 text-red-500 text-sm">
+          <ng-container *ngIf="password?.errors?.['required']">
+            Password is required.
+          </ng-container>
+
+          <ng-container *ngIf="errors?.password">
+            {{ errors?.password?.message }}
+          </ng-container>
         </p>
       </div>
 
@@ -61,7 +93,7 @@
           SIGN UP
         </span>
       </button>
-    </div>
+    </form>
     <div class="text-center text-sm">
       Already a User?
       <button type="button" routerLink="../login" class="font-medium text-gray-800 ml-1">

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services';
 
 @Component({
-  selector: 'app-user',
+  selector: 'nx-user',
   templateUrl: './user.component.html',
   standalone: true,
   imports: [CommonModule]
