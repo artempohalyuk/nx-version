@@ -4,33 +4,41 @@
 
     <ng-container *ngIf="newsLoader$ | async; else newsListTemplate">
       <div class="flex justify-center mt-8">
-        <mat-spinner
-            color="accent"
-            [diameter]="40">
-        </mat-spinner>
+        <mat-spinner color="accent" [diameter]="40"> </mat-spinner>
       </div>
     </ng-container>
 
     <ng-template #newsListTemplate>
       <ng-container *ngIf="newsList$ | async as newsList">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <div *ngFor="let news of newsList | paginate: { itemsPerPage: 6, currentPage: p }" 
+          <div
+            *ngFor="
+              let news of newsList
+                | paginate : { itemsPerPage: 6, currentPage: p }
+            "
             class="bg-white rounded-lg shadow-md p-4 cursor-pointer"
-            [routerLink]="['./', news.newsID]">
+            [routerLink]="['./', news.newsID]"
+          >
             <h2 class="text-xl font-bold mb-2">{{ news.title }}</h2>
             <p class="text-gray-500 mb-2">Author: {{ news.author }}</p>
             <p class="text-gray-500 mb-2">Content: {{ news.content }}</p>
             <p class="text-gray-500 mb-2">
               Source:
-              <a [href]="news.originalSourceUrl" target="_blank" class="text-blue-500 hover:underline">{{ news.originalSource }}</a>
+              <a
+                [href]="news.originalSourceUrl"
+                target="_blank"
+                class="text-blue-500 hover:underline"
+                >{{ news.originalSource }}</a
+              >
             </p>
           </div>
         </div>
 
         <div class="flex justify-center mt-4 news-pagination">
+          <!-- not a good idea to have logic in a view -->
           <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </ng-container>
     </ng-template>
-</div>
+  </div>
 </div>

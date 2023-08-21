@@ -13,32 +13,38 @@ import { AppRepository, loadNewsDetails } from 'src/app/store';
   templateUrl: './news-details.component.html',
   standalone: true,
   imports: [CommonModule],
-  styles: [`
-    :host {
-      display: flex;
-      flex: 1;
-    }
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex: 1;
+      }
 
-    .news-details-page { 
-      flex: 1;
-      background: url("/assets/news-bg.jpg") no-repeat center; background-size: cover;
-    }
-  `]
+      .news-details-page {
+        flex: 1;
+        background: url('/assets/news-bg.jpg') no-repeat center;
+        background-size: cover;
+      }
+    `,
+  ],
 })
 export class NewsDetailsComponent implements OnInit {
-    newsDetails$: Observable<INews | null> = this._appRepository.newsDetails$.pipe(map((res) => res?.data ?? null));
-    newsDetailsLoader$: Observable<boolean> = this._appRepository.newsDetails$.pipe(map((res) => res?.loading ?? false));
+  // end component should not be aware of the structure of the store
+  // all data should be in form of view models that are returned by the selectors
+  newsDetails$: Observable<INews | null> =
+    this._appRepository.newsDetails$.pipe(map((res) => res?.data ?? null));
+  newsDetailsLoader$: Observable<boolean> =
+    this._appRepository.newsDetails$.pipe(map((res) => res?.loading ?? false));
 
-    constructor(
-      private actions: Actions,
-      private _appRepository: AppRepository,
-      private _activatedRoute: ActivatedRoute
-    ) { }
+  constructor(
+    private actions: Actions,
+    private _appRepository: AppRepository,
+    private _activatedRoute: ActivatedRoute
+  ) {}
 
-    ngOnInit() {
-      const newsId = this._activatedRoute.snapshot.paramMap.get('id');
+  ngOnInit() {
+    const newsId = this._activatedRoute.snapshot.paramMap.get('id');
 
-      this.actions.dispatch(loadNewsDetails(String(newsId)));
-    }
-
+    this.actions.dispatch(loadNewsDetails(String(newsId)));
+  }
 }

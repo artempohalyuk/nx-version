@@ -1,6 +1,15 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../service';
 
@@ -9,20 +18,20 @@ import { AuthService } from '../service';
   templateUrl: './registration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterModule]
+  imports: [ReactiveFormsModule, NgIf, RouterModule],
 })
-export class RegistrationComponent{
+export class RegistrationComponent {
   registrationForm: FormGroup = this._fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
   errors!: {
-    firstName: { message: string },
-    lastName: { message: string },
-    email: { message: string },
-    password: { message: string }
+    firstName: { message: string };
+    lastName: { message: string };
+    email: { message: string };
+    password: { message: string };
   } | null;
   isLoading!: boolean;
 
@@ -59,13 +68,15 @@ export class RegistrationComponent{
 
     this._authService.registration(this.registrationForm.value).subscribe(
       (response) => {
+        // move logic to service or store
         localStorage.setItem('token', response.token);
         this._router.navigate(['/']);
-      }, (errorResponse) => {
+      },
+      (errorResponse) => {
         this.errors = errorResponse?.error?.error?.payload?.errors;
         this.isLoading = false;
         this._cdr.markForCheck();
       }
-    )
+    );
   }
 }

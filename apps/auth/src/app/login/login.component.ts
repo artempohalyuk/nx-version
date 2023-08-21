@@ -1,6 +1,15 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../service';
 
@@ -9,14 +18,14 @@ import { AuthService } from '../service';
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterModule]
+  imports: [ReactiveFormsModule, NgIf, RouterModule],
 })
 export class LoginComponent {
   loginForm: FormGroup = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
-  errors!: { email: string, password: string } | null;
+  errors!: { email: string; password: string } | null;
   isLoading!: boolean;
 
   get email() {
@@ -41,16 +50,21 @@ export class LoginComponent {
     }
 
     this.isLoading = true;
-    
+
     this._authService.login(this.loginForm.value).subscribe(
       (response) => {
+        // keeping logic inside component is not a best practice
         localStorage.setItem('token', response.token);
         this._router.navigate(['/']);
-      }, (errorResponse) => {
-        this.errors = errorResponse && errorResponse.error && errorResponse.error.error.payload;
+      },
+      (errorResponse) => {
+        this.errors =
+          errorResponse &&
+          errorResponse.error &&
+          errorResponse.error.error.payload;
         this.isLoading = false;
         this._cdr.markForCheck();
       }
-    )
+    );
   }
 }

@@ -12,8 +12,12 @@ import { IPlayer, IUser, IUserTeam } from '@models';
 import { AuthService } from 'src/app/services';
 import { CreateNewTeamPopupComponent } from 'src/app/shared/components';
 import { NameFilterPipe, PositionFilterPipe } from './pipes';
-import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from 'src/app/store';
-
+import {
+  AppRepository,
+  loadActivePlayers,
+  loadUserTeam,
+  updateUserTeam,
+} from 'src/app/store';
 
 @Component({
   selector: 'nx-management',
@@ -26,29 +30,40 @@ import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from '
     PositionFilterPipe,
     CommonModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
-  styles: [`
-    :host {
-      display: flex;
-      flex: 1;
-    }
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex: 1;
+      }
 
-    .management-page {
-      flex: 1;
-      background: url("/assets/team-bg.jpg") no-repeat center; background-size: cover;
-    }
+      .management-page {
+        flex: 1;
+        background: url('/assets/team-bg.jpg') no-repeat center;
+        background-size: cover;
+      }
 
-    .management-pagination ::ng-deep .ngx-pagination a { color: white }
-  `]
+      .management-pagination ::ng-deep .ngx-pagination a {
+        color: white;
+      }
+    `,
+  ],
 })
 export class ManagementComponent implements OnInit {
   currentPage = 1;
   searchTerm!: string;
   selectedPosition = '';
   userTeam!: IUserTeam;
-  activePlayers$: Observable<IPlayer[] | null> = this._appRepository.activePlayers$.pipe(map((res) => res?.data ?? null));
-  activePlayersLoading$: Observable<boolean> = this._appRepository.activePlayers$.pipe(map((res) => res?.loading ?? false));
+  // end component should not be aware of the structure of the store
+  // all data should be in form of view models that are returned by the selectors
+  activePlayers$: Observable<IPlayer[] | null> =
+    this._appRepository.activePlayers$.pipe(map((res) => res?.data ?? null));
+  activePlayersLoading$: Observable<boolean> =
+    this._appRepository.activePlayers$.pipe(
+      map((res) => res?.loading ?? false)
+    );
   userTeam$: Observable<IUserTeam | null> = this._appRepository.userTeam$.pipe(
     map((res) => {
       if (res?.data) {
@@ -58,7 +73,9 @@ export class ManagementComponent implements OnInit {
       return res?.data ?? null;
     })
   );
-  userTeamLoading$: Observable<boolean> = this._appRepository.userTeam$.pipe(map((res) => res?.loading ?? false));
+  userTeamLoading$: Observable<boolean> = this._appRepository.userTeam$.pipe(
+    map((res) => res?.loading ?? false)
+  );
 
   get currentUser(): IUser | null {
     return this._authService.getCurrentUser();
@@ -69,7 +86,7 @@ export class ManagementComponent implements OnInit {
     private _actions: Actions,
     private _appRepository: AppRepository,
     private _authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this._actions.dispatch(loadActivePlayers());
@@ -80,21 +97,25 @@ export class ManagementComponent implements OnInit {
   }
 
   onCreateNewTeam(): void {
+    // move to store/service
     this._dialog.open(CreateNewTeamPopupComponent, {
       width: '400px',
       disableClose: true,
-      autoFocus: true
+      autoFocus: true,
     });
   }
 
   onAddToTeamClick(player: IPlayer): void {
     this.userTeam.players = [player, ...this.userTeam.players];
 
+    // better to have an action like add/remove instead of generic update
     this._actions.dispatch(updateUserTeam(this.userTeam));
   }
 
   removePlayerFromTeam(player: IPlayer): void {
-    this.userTeam.players = this.userTeam.players.filter(p => p.id !== player.id);
+    this.userTeam.players = this.userTeam.players.filter(
+      (p) => p.id !== player.id
+    );
 
     this._actions.dispatch(updateUserTeam(this.userTeam));
   }
