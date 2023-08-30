@@ -6,7 +6,7 @@
         <span class="font-bold">Source:</span> {{ newsDetails.originalSource }}
       </p>
       <p class="text-gray-500 mb-2 text-white">
-        <span class="font-bold">Source URL:</span> <a href="{{ newsDetails.originalSourceUrl }}" target="_blank">{{ newsDetails.originalSourceUrl }}</a>
+        <span class="font-bold">Source URL:</span> <a [href]="newsDetails.originalSourceUrl" target="_blank">{{ newsDetails.originalSourceUrl }}</a>
       </p>
       <p class="text-gray-500 mb-2 text-white">
         <span class="font-bold">Author:</span> {{ newsDetails.author }}

@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Actions } from '@ngneat/effects-ng';
+import { Store } from '@ngrx/store';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { INews } from '@models';
-import { AppRepository, loadNews } from 'src/app/store';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import * as newsActions from '@store';
 
 @Component({
   selector: 'nx-news',
@@ -31,17 +31,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   `]
 })
 export class NewsComponent implements OnInit {
-  p = 1;
-  newsList$: Observable<INews[] | null> = this._appRepository.news$.pipe(map((res) => res?.data ?? null));
-  newsLoader$: Observable<boolean> = this._appRepository.news$.pipe(map((res) => res?.loading ?? false));
+  currentPage = 1;
+  itemsPerPage = 6;
+  newsList$: Observable<INews[]> = this._store.select(newsActions.selectNewsList);
+  newsLoader$: Observable<boolean> = this._store.select(newsActions.selectNewsLoading);
 
   constructor(
-    private actions: Actions,
-    private _appRepository: AppRepository
+    private _store: Store
   ) { }
 
   ngOnInit() {
-    this.actions.dispatch(loadNews());
+    this._store.dispatch(newsActions.loadNews());
+  }
+
+  public onPageChange(page: number): void {
+    this.currentPage = page;
   }
 
 }

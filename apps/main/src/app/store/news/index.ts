@@ -1,0 +1,4 @@
+export * from './news.actions';
+export * from './news.selector';
+export * from './news.effects';
+export * from './news.reducers';

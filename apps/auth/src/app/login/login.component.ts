@@ -2,14 +2,16 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../service';
+
+import { AuthService, AuthHelperService } from '../service';
+import { FormControlValidationDirective } from '../shared/directives';
 
 @Component({
   selector: 'nx-login',
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterModule]
+  imports: [ReactiveFormsModule, NgIf, RouterModule, FormControlValidationDirective]
 })
 export class LoginComponent {
   loginForm: FormGroup = this._fb.group({
@@ -29,6 +31,7 @@ export class LoginComponent {
 
   constructor(
     private _authService: AuthService,
+    private _authHelperService: AuthHelperService,
     private _router: Router,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef
@@ -44,7 +47,7 @@ export class LoginComponent {
     
     this._authService.login(this.loginForm.value).subscribe(
       (response) => {
-        localStorage.setItem('token', response.token);
+        this._authHelperService.saveToken(response.token);
         this._router.navigate(['/']);
       }, (errorResponse) => {
         this.errors = errorResponse && errorResponse.error && errorResponse.error.error.payload;

@@ -1,38 +1,30 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { MatDialogRef } from '@angular/material/dialog';
-import { Actions } from '@ngneat/effects-ng';
 import { Observable, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { AppRepository, IStoreData, createUserTeam } from 'src/app/store';
-import { IUserTeam } from '../../models/user-team.model';
+import * as userTeamActions from '@store';
 import { BaseComponent } from '../base';
-import { AuthService } from 'src/app/services';
-import { IUser } from '../../models/user.model';
+
 @Component({
   selector: 'nx-create-new-team-popup',
   templateUrl: './create-new-team-popup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit {
   newUserTeamForm!: FormGroup;
-  userTeam$: Observable<IStoreData<IUserTeam> | null> = this._appRepository.userTeam$;
-  errorMessage!: string;
-
-  get currentUser(): IUser | null {
-    return this._authService.getCurrentUser();
-  }
+  errorMessage$: Observable<string | undefined> = this._store.select(userTeamActions.selectUserTeamErrors);
+  errorMessage!: string | undefined;
 
   constructor(
-    private _appRepository: AppRepository,
-    private _actions: Actions,
+    private _store: Store,
     private _fb: FormBuilder,
     private _dialogRef: MatDialogRef<CreateNewTeamPopupComponent>,
-    private _authService: AuthService,
   ) {
     super();
   }
@@ -40,33 +32,34 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
   ngOnInit(): void {
     this.newUserTeamForm = this._fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]]
-    })
+    });
 
-    this.userTeam$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(
-      (res) => {
-        if (res?.error) {
-          this.errorMessage = res.error;
-        }
-
-        if (res?.data && this.currentUser) {
-          this._authService.setCurrentUser({...this.currentUser, teamId: res?.data.id });
-          this._dialogRef.close(res?.data);
-        }
-      }
+    this._store.select(userTeamActions.selectUserTeam)
+      .pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(
+        (userTeam) => {
+          if (userTeam) {
+            this._dialogRef.close(userTeam);
+          }
+      } 
     )
+
+    this._store.select(userTeamActions.selectUserTeamErrors)
+      .pipe(
+        takeUntil(this.destroy$)
+    ).subscribe((error) => this.errorMessage = error)
   }
 
   createTeam(): void {
-    const formValue = this.newUserTeamForm.getRawValue();
+    const formValue = this.newUserTeamForm.value;
 
-    if (!formValue.name) {
+    if (!this.newUserTeamForm.valid) {
       this.errorMessage = "Team Name is required.";
       return;
     }
   
-    this._actions.dispatch(createUserTeam(formValue.name));
+    this._store.dispatch(userTeamActions.createUserTeam({name: formValue.name}));
   }
 
   onClosePopup() {

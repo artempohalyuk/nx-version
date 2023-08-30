@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,7 +11,7 @@ import { IHttpErrorResponse } from '../shared/models';
 export class ErrorsNotifierService {
   private error$ = new Subject<IHttpErrorResponse>();
 
-  constructor(private _snackbar: MatSnackBar, private _zone: NgZone) {}
+  constructor(private _snackbar: MatSnackBar) {}
 
   run(): void {
     this.error$
@@ -29,15 +29,13 @@ export class ErrorsNotifierService {
   }
 
   handleError(httpErrorResponse: IHttpErrorResponse) {
-    this._zone.run(() => {
-      this._snackbar.open(
-        httpErrorResponse.error.error?.statusMessage || 'Something went wrong. We are already working on it!',
-        'Close',
-        {
-          verticalPosition: 'top',
-          horizontalPosition: 'right'
-        }
-      );
-    })
+    this._snackbar.open(
+      httpErrorResponse.error.error?.statusMessage || 'Something went wrong. We are already working on it!',
+      'Close',
+      {
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
   }
 }

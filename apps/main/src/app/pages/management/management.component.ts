@@ -2,17 +2,18 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { Observable, map } from 'rxjs';
-import { Actions } from '@ngneat/effects-ng';
+import { Observable, takeUntil, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { Store, select } from '@ngrx/store';
 
 import { IPlayer, IUser, IUserTeam } from '@models';
-import { AuthService } from 'src/app/services';
-import { CreateNewTeamPopupComponent } from 'src/app/shared/components';
+import { BaseComponent, CreateNewTeamPopupComponent } from 'src/app/shared/components';
 import { NameFilterPipe, PositionFilterPipe } from './pipes';
-import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from 'src/app/store';
+import * as playersActions from '@store';
+import * as userTeamActions from '@store';
+import * as authActions from '@store';
 
 
 @Component({
@@ -42,41 +43,42 @@ import { AppRepository, loadActivePlayers, loadUserTeam, updateUserTeam } from '
     .management-pagination ::ng-deep .ngx-pagination a { color: white }
   `]
 })
-export class ManagementComponent implements OnInit {
+export class ManagementComponent extends BaseComponent implements OnInit {
   currentPage = 1;
+  itemsPerPage = 5;
   searchTerm!: string;
   selectedPosition = '';
   userTeam!: IUserTeam;
-  activePlayers$: Observable<IPlayer[] | null> = this._appRepository.activePlayers$.pipe(map((res) => res?.data ?? null));
-  activePlayersLoading$: Observable<boolean> = this._appRepository.activePlayers$.pipe(map((res) => res?.loading ?? false));
-  userTeam$: Observable<IUserTeam | null> = this._appRepository.userTeam$.pipe(
-    map((res) => {
-      if (res?.data) {
-        this.userTeam = res?.data;
+  activePlayers$: Observable<IPlayer[]> = this._store.select(playersActions.selectPlayersList);
+  activePlayersLoading$: Observable<boolean> = this._store.select(playersActions.selectPlayersLoading);
+  userTeam$: Observable<IUserTeam | null> = this._store.pipe(
+    select(userTeamActions.selectUserTeam),
+    tap((userTeam) => {
+      if (userTeam) {
+        this.userTeam = userTeam;
       }
-
-      return res?.data ?? null;
     })
   );
-  userTeamLoading$: Observable<boolean> = this._appRepository.userTeam$.pipe(map((res) => res?.loading ?? false));
-
-  get currentUser(): IUser | null {
-    return this._authService.getCurrentUser();
-  }
+  userTeamLoading$: Observable<boolean> = this._store.select(userTeamActions.selectUserTeamLoading);
+  user$: Observable<IUser | null> = this._store.select(authActions.selectUser);
 
   constructor(
     private _dialog: MatDialog,
-    private _actions: Actions,
-    private _appRepository: AppRepository,
-    private _authService: AuthService
-  ) { }
+    private _store: Store,
+  ) {
+    super();
+  }
 
   ngOnInit() {
-    this._actions.dispatch(loadActivePlayers());
+    this._store.dispatch(playersActions.loadPlayers());
 
-    if (this.currentUser?.teamId) {
-      this._actions.dispatch(loadUserTeam());
-    }
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe(
+      (user) => {
+        if (user?.teamId) {
+          this._store.dispatch(userTeamActions.loadUserTeam())
+        }
+      }
+    )
   }
 
   onCreateNewTeam(): void {
@@ -88,14 +90,18 @@ export class ManagementComponent implements OnInit {
   }
 
   onAddToTeamClick(player: IPlayer): void {
-    this.userTeam.players = [player, ...this.userTeam.players];
+    const updatedPlayers = [player, ...this.userTeam.players];
 
-    this._actions.dispatch(updateUserTeam(this.userTeam));
+    this._store.dispatch(userTeamActions.addPlayerToUserTeam({userTeam: {...this.userTeam, players: updatedPlayers}}));
   }
 
   removePlayerFromTeam(player: IPlayer): void {
-    this.userTeam.players = this.userTeam.players.filter(p => p.id !== player.id);
+    const updatedPlayers = this.userTeam.players.filter(p => p.id !== player.id);
 
-    this._actions.dispatch(updateUserTeam(this.userTeam));
+    this._store.dispatch(userTeamActions.removePlayerFromUserTeam({ userTeam: {...this.userTeam, players: updatedPlayers}}));
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
   }
 }

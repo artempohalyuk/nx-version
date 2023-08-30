@@ -12,6 +12,7 @@
     "paths": {
       "@env": ["src/environments/environment"],
       "@models": ["src/app/shared/models"],
+      "@store": ["src/app/store"],
     },
   },
   "files": [],

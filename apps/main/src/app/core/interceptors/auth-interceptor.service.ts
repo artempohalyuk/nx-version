@@ -1,14 +1,14 @@
-import { inject } from '@angular/core';
 import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
 
-import { AuthService } from 'src/app/services';
+import { StorageHelper } from 'src/app/utils';
+import { StorageKey } from 'src/app/shared';
 
 export function AuthInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
-  const authService = inject(AuthService);
+  const token = StorageHelper.getItemAsString(localStorage, StorageKey.Token);
 
-  if (authService.isLoggedIn()) {
+  if (token) {
     request = request.clone({
-      headers: request.headers.append('Authorization', authService.getToken()),
+      headers: request.headers.append('Authorization', token),
     });
   }
   return next(request);

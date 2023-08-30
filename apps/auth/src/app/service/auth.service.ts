@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '@env';
-import { Observable, catchError, map, of, throwError } from 'rxjs';
-import { IHttpErrorResponse, IHttpResponse } from '@models';
+import { Observable, map } from 'rxjs';
+import { IHttpResponse } from '@models';
 import { ILoginFormData, IRegistrationFormData } from '../models';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthService {
   private _apiEndpoint = environment.apiEndpoint;
 

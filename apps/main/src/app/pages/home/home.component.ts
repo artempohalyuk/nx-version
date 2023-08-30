@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { Observable, map } from 'rxjs';
-import { Actions } from '@ngneat/effects-ng';
+import { Observable, takeUntil, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Store } from '@ngrx/store';
 
-import { INews } from '@models';
-import { CreateNewTeamPopupComponent, SidebarNewsComponent } from 'src/app/shared/components';
-import { AppRepository, loadNews, loadUserTeam } from 'src/app/store';
-import { AuthService } from 'src/app/services';
+import { INews, IUserTeam } from '@models';
+import { BaseComponent, CreateNewTeamPopupComponent, SidebarNewsComponent } from 'src/app/shared/components';
+import * as newsActions from '@store';
+import * as userTeamActions from '@store';
+import * as authActions from '@store';
 
 @Component({
   selector: 'nx-home',
@@ -30,25 +31,32 @@ import { AuthService } from 'src/app/services';
     }
   `]
 })
-export class HomeComponent implements OnInit {
-  userTeam$: Observable<any> = this._appRepository.userTeam$.pipe(map((res) => res?.data ?? null));
-  userTeamLoading$: Observable<any> = this._appRepository.userTeam$.pipe(map((res) => res?.loading ?? null));
-  newsList$: Observable<INews[] | null> = this._appRepository.news$.pipe(map((res) => res?.data ?? null));
-  newsLoading$: Observable<boolean> = this._appRepository.news$.pipe(map((res) => res?.loading ?? false));
+export class HomeComponent extends BaseComponent implements OnInit {
+  userTeam$: Observable<IUserTeam | null> = this._store.select(userTeamActions.selectUserTeam);
+  userTeamLoading$: Observable<boolean> = this._store.select(userTeamActions.selectUserTeamLoading);
+  newsList$: Observable<INews[]> = this._store.select(newsActions.selectNewsList);
+  newsLoading$: Observable<boolean> = this._store.select(newsActions.selectNewsLoading);
+
 
   constructor(
     private _router: Router,
     private _dialog: MatDialog,
-    private _actions: Actions,
-    private _appRepository: AppRepository,
-    private _authService: AuthService) { }
+    private _store: Store,
+  ) {
+    super();
+  }
 
   ngOnInit() {
-    this._actions.dispatch(loadNews());
-
-    if (this._authService.getCurrentUser()?.teamId) {
-      this._actions.dispatch(loadUserTeam());
-    }
+    this._store.dispatch(newsActions.loadNews());
+    this._store.select(authActions.selectUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (user) => {
+          if (user?.id) {
+            this._store.dispatch(userTeamActions.loadUserTeam());
+          }
+        }
+      )
   }
 
   onCreateNewTeam(): void {

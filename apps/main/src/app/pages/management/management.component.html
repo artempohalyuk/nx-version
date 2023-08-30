@@ -26,7 +26,7 @@
 
         <ng-template #activePlayersListTemplate>
           <ng-container *ngIf="activePlayers$ | async as activePlayers">
-            <div *ngFor="let player of activePlayers | nameFilter: searchTerm | positionFilter: selectedPosition | paginate: { itemsPerPage: 5, currentPage: currentPage }" 
+            <div *ngFor="let player of activePlayers | nameFilter: searchTerm | positionFilter: selectedPosition | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
               class="bg-white rounded-lg shadow-md p-4 mb-4">
               <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-bold">{{ player.firstName }} {{ player.lastName }}</h3>
@@ -50,7 +50,7 @@
             </div>
     
             <div class="flex justify-center management-pagination">
-              <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+              <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
             </div>
           </ng-container>
         </ng-template>

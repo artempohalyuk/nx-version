@@ -2,14 +2,16 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../service';
+
+import { AuthHelperService, AuthService } from '../service';
+import { FormControlValidationDirective } from '../shared/directives';
 
 @Component({
   selector: 'nx-registration',
   templateUrl: './registration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterModule]
+  imports: [ReactiveFormsModule, NgIf, RouterModule, FormControlValidationDirective]
 })
 export class RegistrationComponent{
   registrationForm: FormGroup = this._fb.group({
@@ -44,6 +46,7 @@ export class RegistrationComponent{
 
   constructor(
     private _authService: AuthService,
+    private _authHelperService: AuthHelperService,
     private _router: Router,
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef
@@ -59,7 +62,7 @@ export class RegistrationComponent{
 
     this._authService.registration(this.registrationForm.value).subscribe(
       (response) => {
-        localStorage.setItem('token', response.token);
+        this._authHelperService.saveToken(response.token);
         this._router.navigate(['/']);
       }, (errorResponse) => {
         this.errors = errorResponse?.error?.error?.payload?.errors;

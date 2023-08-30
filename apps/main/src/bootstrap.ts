@@ -5,24 +5,31 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from "@angular/
 import { provideRouter, withEnabledBlockingInitialNavigation } from "@angular/router";
 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { provideEffects, provideEffectsManager } from "@ngneat/effects-ng";
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
+import { MatDialogModule } from "@angular/material/dialog";
 
 import { AppComponent } from "./app/app.component";
 import { APP_ROUTES } from "./app/app.routes";
-import { AppEffects } from "./app/store";
 import { AuthInterceptor, HttpErrorHandlerInterceptor } from "./app/core";
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideEffectsManager(),
-    provideEffects(AppEffects),
     provideHttpClient(
       withInterceptors([
         HttpErrorHandlerInterceptor,
         AuthInterceptor
       ])
     ),
-    importProvidersFrom(BrowserModule, BrowserAnimationsModule, HttpClientModule, MatSnackBarModule),
+    importProvidersFrom(
+      BrowserModule,
+      BrowserAnimationsModule,
+      HttpClientModule,
+      MatSnackBarModule,
+      MatDialogModule,
+      StoreModule.forRoot(),
+      EffectsModule.forRoot(),
+    ),
     provideRouter(APP_ROUTES, withEnabledBlockingInitialNavigation())
   ],
 }).catch((err) =>

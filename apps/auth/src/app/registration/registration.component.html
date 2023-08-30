@@ -7,7 +7,7 @@
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="(firstName?.invalid || errors?.firstName) && (firstName?.dirty || firstName?.touched)"
+          [nxFormControlValidation]="firstName"
           type="text"
           placeholder="First Name"
           formControlName="firstName"
@@ -26,7 +26,7 @@
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="(lastName?.invalid || errors?.lastName) && (lastName?.dirty || lastName?.touched)"
+          [nxFormControlValidation]="lastName"
           type="text"
           placeholder="Last Name"
           formControlName="lastName"
@@ -45,7 +45,7 @@
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="(email?.invalid || errors?.email) && (email?.dirty || email?.touched)"
+          [nxFormControlValidation]="email"
           type="email"
           placeholder="Enter Your Email"
           formControlName="email"
@@ -68,7 +68,7 @@
       <div class='relative'>
         <input
           class="w-full border-2 outline-none p-2 rounded-md"
-          [class.border-red-500]="(password?.invalid || errors?.password) && (password?.dirty || password?.touched)"
+          [nxFormControlValidation]="password"
           type="password"
           placeholder="*******"
           formControlName="password"

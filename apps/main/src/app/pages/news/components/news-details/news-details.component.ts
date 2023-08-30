@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Actions } from '@ngneat/effects-ng';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { INews } from '@models';
-import { AppRepository, loadNewsDetails } from 'src/app/store';
+import * as newsActions from '@store';
 
 @Component({
   selector: 'nx-news-details',
@@ -26,19 +26,18 @@ import { AppRepository, loadNewsDetails } from 'src/app/store';
   `]
 })
 export class NewsDetailsComponent implements OnInit {
-    newsDetails$: Observable<INews | null> = this._appRepository.newsDetails$.pipe(map((res) => res?.data ?? null));
-    newsDetailsLoader$: Observable<boolean> = this._appRepository.newsDetails$.pipe(map((res) => res?.loading ?? false));
+    newsDetails$: Observable<INews | null> = this._store.select(newsActions.selectNewsDetails);
+    newsDetailsLoader$: Observable<boolean> = this._store.select(newsActions.selectNewsDetailsLoading);
 
     constructor(
-      private actions: Actions,
-      private _appRepository: AppRepository,
+      private _store: Store,
       private _activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit() {
       const newsId = this._activatedRoute.snapshot.paramMap.get('id');
 
-      this.actions.dispatch(loadNewsDetails(String(newsId)));
+      this._store.dispatch(newsActions.loadNewsDetails({newsId}));
     }
 
 }

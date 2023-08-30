@@ -1,15 +1,6 @@
-<ng-container *ngIf="!user; else appTemplate">
-  <!-- <div class="flex h-screen justify-center items-center">
-    <mat-spinner
-        color="accent">
-    </mat-spinner>
-  </div> -->
-  <router-outlet></router-outlet>
-</ng-container>
-
-<ng-template #appTemplate>
+<ng-container *ngIf="user$ | async; else authTemplate">
   <div class="relative flex flex-col min-h-screen bg-gray-50">
-    <app-header></app-header>
+    <nx-header></nx-header>
   
     <div class="flex flex-grow bg-slate-800">
       <router-outlet>
@@ -21,7 +12,12 @@
       </router-outlet>
     </div>
   </div>
+</ng-container>
+
+<ng-template #authTemplate>
+  <router-outlet></router-outlet>
 </ng-template>
+
 
 
 

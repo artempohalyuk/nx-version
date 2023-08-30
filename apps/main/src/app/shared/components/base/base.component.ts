@@ -1,12 +1,11 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 
 import { Subject } from "rxjs";
 
-@Component({
-  template: ``,
-  standalone: true
+@Injectable({
+  providedIn: 'root'
 })
-export class BaseComponent implements OnDestroy {
+export abstract class BaseComponent implements OnDestroy {
   destroy$ = new Subject<void>();
  
   ngOnDestroy() {

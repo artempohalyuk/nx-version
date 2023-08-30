@@ -2,29 +2,30 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
-import { AuthService } from 'src/app/services';
-import { IUser } from '../models';
-import { environment } from '@env';
+import * as authActions from '@store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private _store: Store) {}
 
-  canActivate(): Observable<boolean> {
-    return this.authService.getCurrentUser$().pipe(
-      switchMap(
-        (currentUser: IUser | null) => {
-          if (!currentUser) {
+  canActivate(): Observable<Observable<boolean> | Promise<boolean>> {
+    this._store.dispatch(authActions.loadUser());
+
+    return this._store.pipe(
+      select(authActions.selectAuthState),
+      filter(s => !s.isLoading),
+      take(1),
+      map(state => {
+          if (!state.user) {
             return this.router.navigate(['/auth'], { skipLocationChange: true })
           }
-
           return of(true);
-        }
-      )
-    )
+      })
+    );
   }
 }
