@@ -11,9 +11,9 @@ import { Store, select } from '@ngrx/store';
 import { IPlayer, IUser, IUserTeam } from '@models';
 import { BaseComponent, CreateNewTeamPopupComponent } from 'src/app/shared/components';
 import { NameFilterPipe, PositionFilterPipe } from './pipes';
-import * as playersActions from '@store';
-import * as userTeamActions from '@store';
-import * as authActions from '@store';
+import * as playersActions from '@store/players';
+import * as userTeamActions from '@store/user-team';
+import * as authActions from '@store/auth';
 
 
 @Component({

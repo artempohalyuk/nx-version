@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 
 import { ErrorsNotifierService } from 'src/app/services';
 import { HttpStatus } from 'src/app/shared/enums';
-import * as authActions from '@store';
+import * as authActions from '@store/auth';
 
 export function HttpErrorHandlerInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
   const errorsNotifierService = inject(ErrorsNotifierService);

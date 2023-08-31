@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { INews } from '@models';
-import * as newsActions from '@store';
+import * as newsActions from '@store/news';
 
 @Component({
   selector: 'nx-news-details',

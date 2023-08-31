@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import * as userTeamActions from '@store';
+import * as userTeamActions from '@store/user-team';
 import { BaseComponent } from '../base';
 
 @Component({

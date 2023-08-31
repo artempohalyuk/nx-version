@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 
 import { ErrorsNotifierService } from './services';
 import { HeaderComponent } from './core/components';
-import * as authActions from '@store';
+import * as authActions from '@store/auth';
 
 @Component({
   selector: 'nx-root',

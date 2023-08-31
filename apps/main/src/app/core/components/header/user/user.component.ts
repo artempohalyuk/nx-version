@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { IUser } from '@models';
-import * as authActions from '@store';
+import * as authActions from '@store/auth';
 
 @Component({
   selector: 'nx-user',

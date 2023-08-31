@@ -2,16 +2,16 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { Observable, takeUntil, tap } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
 import { INews, IUserTeam } from '@models';
 import { BaseComponent, CreateNewTeamPopupComponent, SidebarNewsComponent } from 'src/app/shared/components';
-import * as newsActions from '@store';
-import * as userTeamActions from '@store';
-import * as authActions from '@store';
+import * as newsActions from '@store/news';
+import * as userTeamActions from '@store/user-team';
+import * as authActions from '@store/auth';
 
 @Component({
   selector: 'nx-home',
