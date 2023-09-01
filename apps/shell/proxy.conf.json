@@ -1,0 +1,10 @@
+{
+    "/assets/auth":{
+        "target": "http://localhost:4201",
+        "secure": false
+    },
+    "/assets/manager":{
+        "target": "http://localhost:4202",
+        "secure": false
+    }
+}

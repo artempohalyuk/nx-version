@@ -1,1 +1,1 @@
-import('./bootstrap').catch((err) => console.error(err));
+import('./bootstrap').then(() => console.log('bootstrap')).catch((err) => console.error(err));
