@@ -5,8 +5,7 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from "@angular/
 import { provideRouter, withEnabledBlockingInitialNavigation } from "@angular/router";
 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { StoreModule } from "@ngrx/store";
-import { EffectsModule } from "@ngrx/effects";
+import { provideStore } from "@ngrx/store";
 import { MatDialogModule } from "@angular/material/dialog";
 
 import { AppComponent } from "./app/app.component";
@@ -27,9 +26,8 @@ bootstrapApplication(AppComponent, {
       HttpClientModule,
       MatSnackBarModule,
       MatDialogModule,
-      StoreModule.forRoot(),
-      EffectsModule.forRoot(),
     ),
+    provideStore(),
     provideRouter(APP_ROUTES, withEnabledBlockingInitialNavigation())
   ],
 }).catch((err) =>

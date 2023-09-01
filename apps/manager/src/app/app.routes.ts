@@ -1,8 +1,7 @@
 import { Route } from '@angular/router';
 import { loadRemoteModule } from '@nx/angular/mf';
-import { importProvidersFrom } from '@angular/core';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 
 import { NewsEffects, newsReducer } from './store/news';
 import { AuthGuard } from './shared/guards';
@@ -16,12 +15,10 @@ export const APP_ROUTES: Route[] = [
     path: '',
     canActivate: [AuthGuard],
     providers: [
-      importProvidersFrom(
-        StoreModule.forFeature('auth', authReducer),
-        StoreModule.forFeature('userTeam', userTeamReducer),
-        StoreModule.forFeature('news', newsReducer),
-        EffectsModule.forFeature([NewsEffects, UserTeamEffects, AuthEffects])
-      )
+      provideState('auth', authReducer),
+      provideState('userTeam', userTeamReducer),
+      provideState('news', newsReducer),
+      provideEffects(NewsEffects, UserTeamEffects, AuthEffects),
     ],
     children: [
       { 
@@ -31,10 +28,8 @@ export const APP_ROUTES: Route[] = [
       { path: 'management', 
         loadComponent: () => import('./pages/management').then(m => m.ManagementComponent),
         providers: [
-          importProvidersFrom(
-            StoreModule.forFeature('players', playersReducer),
-            EffectsModule.forFeature([PlayersEffects])
-          )
+          provideState('players', playersReducer),
+          provideEffects(PlayersEffects),
         ],
       },
       { 
