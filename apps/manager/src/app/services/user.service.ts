@@ -8,7 +8,7 @@ import { IHttpResponse } from "../shared/models/http-response.model";
 import { IUser } from "../shared/models/user.model";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class UserService {
     private _apiEndpoint = environment.apiEndpoint;

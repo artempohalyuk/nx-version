@@ -8,7 +8,7 @@ import { IPlayer } from "../shared/models/player.model";
 import { IHttpResponse } from "../shared/models/http-response.model";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class PlayersService {
     private _apiEndpoint = environment.apiEndpoint;

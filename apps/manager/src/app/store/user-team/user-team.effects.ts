@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import * as userTeamActions from './index';
@@ -6,53 +6,66 @@ import { UserTeamService } from "src/app/services";
 import { IHttpErrorResponse, IUserTeam } from "@models";
 import { catchError, map, of, switchMap } from "rxjs";
 
-@Injectable()
-export class UserTeamEffects {
-    constructor(
-        private _actions$: Actions,
-        private _userTeamService: UserTeamService
-    ) {}
 
-    loadUserTeam$ = createEffect(() => 
-        this._actions$.pipe(
+const loadUserTeam = createEffect(
+    (_actions$ = inject(Actions), _userTeamService = inject(UserTeamService)) =>         
+        _actions$.pipe(
             ofType(userTeamActions.loadUserTeam.type),
-            switchMap(() => this._userTeamService.getUserTeam()),
+            switchMap(() => _userTeamService.getUserTeam()),
             map((userTeam: IUserTeam) => userTeamActions.loadUserTeamSuccess({userTeam}))
-        )
-    )
+    ),
+    { functional: true }
+  );
 
-    createUserTeam$ = createEffect(() => 
-        this._actions$.pipe(
+
+  const createUserTeam = createEffect(
+    (_actions$ = inject(Actions), _userTeamService = inject(UserTeamService)) =>         
+        _actions$.pipe(
             ofType(userTeamActions.createUserTeam.type),
-            switchMap(({name}) => this._userTeamService.createUserTeam(name)),
+            switchMap(({name}) => _userTeamService.createUserTeam(name)),
             map((userTeam: IUserTeam) => userTeamActions.createUserTeamSuccess({userTeam})),
             catchError((error: IHttpErrorResponse) => of(
                 userTeamActions.createUserTeamFailure({ error: error.error.error?.statusMessage })
-            )),
-        )
-    )
+            ))
+    ),
+    { functional: true }
+  );
 
-    addPlayerToUserTeam$ = createEffect(() => 
-        this._actions$.pipe(
+  const addPlayerToUserTeam = createEffect(
+    (_actions$ = inject(Actions), _userTeamService = inject(UserTeamService)) =>         
+        _actions$.pipe(
             ofType(userTeamActions.addPlayerToUserTeam.type),
-            switchMap(({userTeam}) => this._userTeamService.updateUserTeam(userTeam)),
+            switchMap(({userTeam}) => _userTeamService.updateUserTeam(userTeam)),
             map((userTeam: IUserTeam) => userTeamActions.updateUserTeamSuccess({userTeam}))
-        )
-    )
+    ),
+    { functional: true }
+  );
 
-    removePlayerFromUserTeam$ = createEffect(() => 
-        this._actions$.pipe(
+  const removePlayerFromUserTeam = createEffect(
+    (_actions$ = inject(Actions), _userTeamService = inject(UserTeamService)) =>         
+        _actions$.pipe(
             ofType(userTeamActions.removePlayerFromUserTeam.type),
-            switchMap(({userTeam}) => this._userTeamService.updateUserTeam(userTeam)),
+            switchMap(({userTeam}) => _userTeamService.updateUserTeam(userTeam)),
             map((userTeam: IUserTeam) => userTeamActions.updateUserTeamSuccess({userTeam}))
-        )
-    )
+    ),
+    { functional: true }
+  );
 
-    removeUserTeam$ = createEffect(() => 
-        this._actions$.pipe(
+  
+  const removeUserTeam = createEffect(
+    (_actions$ = inject(Actions), _userTeamService = inject(UserTeamService)) =>         
+        _actions$.pipe(
             ofType(userTeamActions.removeUserTeam.type),
-            switchMap(() => this._userTeamService.removeUserTeam()),
+            switchMap(() => _userTeamService.removeUserTeam()),
             map((status: boolean) => userTeamActions.removeUserTeamSuccess({status}))
-        )
-    )
+    ),
+    { functional: true }
+  );
+
+export const UserTeamEffects = {
+    loadUserTeam,
+    createUserTeam,
+    addPlayerToUserTeam,
+    removePlayerFromUserTeam,
+    removeUserTeam
 }

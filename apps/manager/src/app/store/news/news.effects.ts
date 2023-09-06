@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import * as newsActions from './index';
@@ -6,26 +6,28 @@ import { NewsService } from "src/app/services";
 import { INews } from "@models";
 import { map, switchMap } from "rxjs";
 
-@Injectable()
-export class NewsEffects {
-    constructor(
-        private _actions$: Actions,
-        private _newsService: NewsService
-    ) {}
-
-    loadNews$ = createEffect(() => 
-        this._actions$.pipe(
+const loadNews = createEffect(
+    (_actions$ = inject(Actions), _newsService = inject(NewsService)) =>         
+        _actions$.pipe(
             ofType(newsActions.loadNews.type),
-            switchMap(() => this._newsService.getNews()),
+            switchMap(() => _newsService.getNews()),
             map((news: INews[]) => newsActions.loadNewsSuccess({news}))
-        )
-    )
+    ),
+    { functional: true }
+  );
 
-    loadNewsDetails$ = createEffect(() => 
-        this._actions$.pipe(
+
+  const loadNewsDetails = createEffect(
+    (_actions$ = inject(Actions), _newsService = inject(NewsService)) =>         
+        _actions$.pipe(
             ofType(newsActions.loadNewsDetails.type),
-            switchMap(({newsId}) => this._newsService.getNewsDetails(newsId)),
+            switchMap(({newsId}) => _newsService.getNewsDetails(newsId)),
             map((newsDetails: INews) => newsActions.loadNewsDetailsSuccess({newsDetails}))
-        )
-    )
+    ),
+    { functional: true }
+  );
+
+export const NewsEffects = {
+    loadNews,
+    loadNewsDetails
 }

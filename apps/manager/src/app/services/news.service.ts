@@ -7,7 +7,7 @@ import { INews } from "../shared/models/news.model";
 import { IHttpResponse } from "../shared/models/http-response.model";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class NewsService {
     private _apiEndpoint = environment.apiEndpoint;

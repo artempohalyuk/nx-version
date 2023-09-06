@@ -4,21 +4,36 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 
 import { NewsEffects, newsReducer } from './store/news';
-import { AuthGuard } from './shared/guards';
+import { canActivateAuthGuard } from './shared/guards';
 import { UserTeamEffects, userTeamReducer } from './store/user-team';
 import { PlayersEffects, playersReducer } from './store/players';
 import { AuthEffects, authReducer } from './store/auth';
+import { importProvidersFrom } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpErrorHandlerInterceptor, AuthInterceptor } from './core';
 
 
 export const APP_ROUTES: Route[] = [
   {
     path: '',
-    canActivate: [AuthGuard],
+    canActivate: [canActivateAuthGuard],
     providers: [
+      provideHttpClient(
+        withInterceptors([
+          HttpErrorHandlerInterceptor,
+          AuthInterceptor
+        ])
+      ),
       provideState('auth', authReducer),
       provideState('userTeam', userTeamReducer),
       provideState('news', newsReducer),
       provideEffects(NewsEffects, UserTeamEffects, AuthEffects),
+      importProvidersFrom(
+        MatSnackBarModule,
+        MatDialogModule,
+      ),      
     ],
     children: [
       { 
