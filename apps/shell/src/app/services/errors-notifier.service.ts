@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { IHttpErrorResponse } from '../models';
 
 @Injectable({
-  providedIn: 'any',
+  providedIn: 'root',
 })
 export class ErrorsNotifierService {
   private error$ = new Subject<IHttpErrorResponse>();
