@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ErrorsNotifierService } from './services';
 
 @Component({
   selector: 'nx-root',
@@ -8,4 +9,16 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule]
 })
-export class AppComponent {}
+export class AppComponent implements OnInit, OnDestroy {
+  constructor(
+    private _errorsNotifierService: ErrorsNotifierService,
+  ) {}
+
+  ngOnInit(): void {
+    this._errorsNotifierService.run();
+  }
+
+  ngOnDestroy(): void {
+    this._errorsNotifierService.stop();
+  }
+}

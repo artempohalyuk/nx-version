@@ -63,7 +63,7 @@ export class RegistrationComponent{
     this._authService.registration(this.registrationForm.value).subscribe(
       (response) => {
         this._authHelperService.saveToken(response.token);
-        this._router.navigate(['/']);
+        this._router.navigate(['/manager']);
       }, (errorResponse) => {
         this.errors = errorResponse?.error?.error?.payload?.errors;
         this.isLoading = false;

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import * as playersActions from './index';
@@ -6,18 +6,17 @@ import { PlayersService } from "src/app/services";
 import { IPlayer } from "@models";
 import { map, switchMap } from "rxjs";
 
-@Injectable()
-export class PlayersEffects {
-    constructor(
-        private _actions$: Actions,
-        private _playersService: PlayersService
-    ) {}
+const loadPlayers = createEffect((
+    actions$ = inject(Actions),
+    playersService = inject(PlayersService)
+) => 
+    actions$.pipe(
+        ofType(playersActions.loadPlayers.type),
+        switchMap(() => playersService.getActivePlayers()),
+        map((players: IPlayer[]) => playersActions.loadPlayersSuccess({players}))
+    ), { functional: true }
+)
 
-    loadPlayers$ = createEffect(() => 
-        this._actions$.pipe(
-            ofType(playersActions.loadPlayers.type),
-            switchMap(() => this._playersService.getActivePlayers()),
-            map((players: IPlayer[]) => playersActions.loadPlayersSuccess({players}))
-        )
-    )
+export const PlayersEffects = {
+    loadPlayers
 }

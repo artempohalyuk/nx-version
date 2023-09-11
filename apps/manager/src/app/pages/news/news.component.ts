@@ -24,7 +24,7 @@ import * as newsActions from '@store/news';
 
     .news-page {
       flex: 1;
-      background: url("/assets/news-bg.jpg") no-repeat center; background-size: cover;
+      background: url("/assets/manager/news-bg.jpg") no-repeat center; background-size: cover;
     }
 
     .news-pagination ::ng-deep .ngx-pagination a { color: white }

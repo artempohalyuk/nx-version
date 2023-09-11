@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { Observable, takeUntil } from 'rxjs';
@@ -27,7 +27,7 @@ import * as authActions from '@store/auth';
   
     .home-page {
       flex: 1;
-      background: url('/assets/main-bg.jpg') no-repeat center; background-size: cover;
+      background: url('/assets/manager/main-bg.jpg') no-repeat center; background-size: cover;
     }
   `]
 })
@@ -40,6 +40,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
 
   constructor(
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _dialog: MatDialog,
     private _store: Store,
   ) {
@@ -69,13 +70,17 @@ export class HomeComponent extends BaseComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (userTeam) => {
         if (userTeam) {
-          this._router.navigate(['/management']);
+          this.navigateManagement();
         }
       }
     )
   }
 
   onManageClick(): void {
-    this._router.navigate(['/management']);
+    this.navigateManagement();
+  }
+
+  navigateManagement(): void {
+    this._router.navigate(['management'], { relativeTo: this._activatedRoute.parent });
   }
 }

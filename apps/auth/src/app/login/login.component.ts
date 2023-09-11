@@ -48,7 +48,7 @@ export class LoginComponent {
     this._authService.login(this.loginForm.value).subscribe(
       (response) => {
         this._authHelperService.saveToken(response.token);
-        this._router.navigate(['/']);
+        this._router.navigate(['/manager']);
       }, (errorResponse) => {
         this.errors = errorResponse && errorResponse.error && errorResponse.error.error.payload;
         this.isLoading = false;

@@ -4,25 +4,37 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 
 import { NewsEffects, newsReducer } from './store/news';
-import { AuthGuard } from './shared/guards';
 import { UserTeamEffects, userTeamReducer } from './store/user-team';
 import { PlayersEffects, playersReducer } from './store/players';
 import { AuthEffects, authReducer } from './store/auth';
+import { importProvidersFrom } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AuthGuard } from './shared/guards';
+import { AppComponent } from './app.component';
 
 
 export const APP_ROUTES: Route[] = [
   {
     path: '',
     canActivate: [AuthGuard],
+    component: AppComponent,
     providers: [
+      importProvidersFrom(
+        MatDialogModule
+      ),
       provideState('auth', authReducer),
       provideState('userTeam', userTeamReducer),
       provideState('news', newsReducer),
       provideEffects(NewsEffects, UserTeamEffects, AuthEffects),
     ],
     children: [
-      { 
+      {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'home'
+      },
+      { 
+        path: 'home',
         loadComponent: () => import('./pages/home').then(m => m.HomeComponent),
       },
       { path: 'management', 

@@ -3,10 +3,10 @@ import { Subject } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { IHttpErrorResponse } from '../shared/models';
+import { IHttpErrorResponse } from '../models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'any',
 })
 export class ErrorsNotifierService {
   private error$ = new Subject<IHttpErrorResponse>();

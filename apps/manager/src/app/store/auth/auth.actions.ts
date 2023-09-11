@@ -10,6 +10,13 @@ export const loadUserSuccess = createAction(
     }>()
 );
 
+export const loadUserFailure = createAction(
+    `${loadUser.type} Failure`,
+    props<{
+        error: string | undefined;
+    }>()
+);
+
 export const userLogout = createAction(
     '[Auth] User Logout',
     props<{

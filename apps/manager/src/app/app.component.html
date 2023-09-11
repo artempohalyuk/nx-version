@@ -1,7 +1,7 @@
-<ng-container *ngIf="user$ | async; else authTemplate">
+<ng-container *ngIf="user$ | async">
   <div class="relative flex flex-col min-h-screen bg-gray-50">
     <nx-header></nx-header>
-  
+
     <div class="flex flex-grow bg-slate-800">
       <router-outlet>
         <div *ngIf="isLoading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -14,6 +14,10 @@
   </div>
 </ng-container>
 
-<ng-template #authTemplate>
-  <router-outlet></router-outlet>
+<ng-template #loadingTemplate>
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <mat-spinner
+        color="accent">
+    </mat-spinner>
+  </div>
 </ng-template>

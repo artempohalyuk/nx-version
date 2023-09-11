@@ -37,7 +37,7 @@ import * as authActions from '@store/auth';
 
     .management-page {
       flex: 1;
-      background: url("/assets/team-bg.jpg") no-repeat center; background-size: cover;
+      background: url("/assets/manager/team-bg.jpg") no-repeat center; background-size: cover;
     }
 
     .management-pagination ::ng-deep .ngx-pagination a { color: white }

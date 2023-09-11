@@ -23,6 +23,13 @@ export const authReducer = createReducer<IAuthState>(
             user: user
         };
     }),
+    on(authActions.loadUserFailure, (state) => {
+        return {
+            ...state,
+            isLoading: false,
+            user: null
+        };
+    }),
     on(authActions.userLogout, (state, { user }) => {
         return {
             ...state,

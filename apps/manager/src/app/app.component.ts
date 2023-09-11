@@ -1,11 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterModule } from '@angular/router';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
-import { ErrorsNotifierService } from './services';
 import { HeaderComponent } from './core/components';
 import * as authActions from '@store/auth';
 
@@ -20,12 +19,11 @@ import * as authActions from '@store/auth';
     RouterModule,
   ]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   user$ = this._store.select(authActions.selectUser);
   isLoading!: boolean;
 
   constructor(
-    private _errorsNotifierService: ErrorsNotifierService,
     private _router: Router,
     private _store: Store
   ) {
@@ -38,13 +36,5 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     );
-  }
-
-  ngOnInit(): void {
-    this._errorsNotifierService.run();
-  }
-
-  ngOnDestroy(): void {
-    this._errorsNotifierService.stop();
   }
 }
