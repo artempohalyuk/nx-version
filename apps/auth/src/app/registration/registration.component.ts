@@ -20,12 +20,14 @@ export class RegistrationComponent{
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
+  // why ot to use default value here or allow undefined? 
   errors!: {
     firstName: { message: string },
     lastName: { message: string },
     email: { message: string },
     password: { message: string }
   } | null;
+  // why ot to use default value here?
   isLoading!: boolean;
 
   get firstName() {

@@ -14,6 +14,8 @@ const loadUser = createEffect((
     userService = inject(UserService)
 ) => 
     actions$.pipe(
+        // it will do exactly same, no need to get type explicit
+        // ofType(authActions.loadUser),
         ofType(authActions.loadUser.type),
         switchMap(() => userService.getCurrentUser()),
         map((user: IUser) => authActions.loadUserSuccess({user})),
@@ -27,6 +29,7 @@ const logout = createEffect((
     router = inject(Router)
 ) => 
     actions$.pipe(
+        // it will do exactly same, no need to get type explicit
         ofType(authActions.userLogout.type),
         map(() => {
             StorageHelper.setItem(localStorage, StorageKey.Token, null);

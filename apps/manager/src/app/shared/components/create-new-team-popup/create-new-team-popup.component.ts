@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+// why actions? those are selectors
 import * as userTeamActions from '@store/user-team';
 import { BaseComponent } from '../base';
 
@@ -19,6 +20,7 @@ import { BaseComponent } from '../base';
 export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit {
   newUserTeamForm!: FormGroup;
   errorMessage$: Observable<string | undefined> = this._store.select(userTeamActions.selectUserTeamErrors);
+  // why not to use default values 
   errorMessage!: string | undefined;
 
   constructor(
@@ -48,7 +50,11 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
     this._store.select(userTeamActions.selectUserTeamErrors)
       .pipe(
         takeUntil(this.destroy$)
-    ).subscribe((error) => this.errorMessage = error)
+    ).subscribe((error) => 
+      // without call to ChangeDetectorRef this can cause issues
+      this.errorMessage = error
+      // why not to use Observable instead?
+    )
   }
 
   createTeam(): void {

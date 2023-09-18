@@ -18,7 +18,9 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
+  // why ot to use default value here or allow undefined? 
   errors!: { email: string, password: string } | null;
+  // why ot to use default value here?
   isLoading!: boolean;
 
   get email() {
@@ -42,7 +44,6 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
-
     this.isLoading = true;
     
     this._authService.login(this.loginForm.value).subscribe(

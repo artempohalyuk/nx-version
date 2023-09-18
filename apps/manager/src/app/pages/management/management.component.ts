@@ -55,6 +55,8 @@ export class ManagementComponent extends BaseComponent implements OnInit {
     select(userTeamActions.selectUserTeam),
     tap((userTeam) => {
       if (userTeam) {
+        // It will be better to reorganize actions in order to avoid bassness logic with adding/removing items in component
+        // also currently it requires additional variable that is duplicating the logic
         this.userTeam = userTeam;
       }
     })
@@ -82,6 +84,8 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   onCreateNewTeam(): void {
+    // why not to load it only when we need CreateNewTeamPopupComponent?
+    // why not to use it in effects?  
     this._dialog.open(CreateNewTeamPopupComponent, {
       width: '400px',
       disableClose: true,
@@ -92,12 +96,14 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   onAddToTeamClick(player: IPlayer): void {
     const updatedPlayers = [player, ...this.userTeam.players];
 
+    // try to move logic to effects 
     this._store.dispatch(userTeamActions.addPlayerToUserTeam({userTeam: {...this.userTeam, players: updatedPlayers}}));
   }
 
   removePlayerFromTeam(player: IPlayer): void {
     const updatedPlayers = this.userTeam.players.filter(p => p.id !== player.id);
 
+    // try to move logic to effects 
     this._store.dispatch(userTeamActions.removePlayerFromUserTeam({ userTeam: {...this.userTeam, players: updatedPlayers}}));
   }
 

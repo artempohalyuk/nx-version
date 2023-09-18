@@ -49,6 +49,8 @@ export class HomeComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this._store.dispatch(newsActions.loadNews());
+    // technically this can be considered an business logic and better to keep in in effects 
+    // https://www.youtube.com/watch?v=JmnsEvoy-gY
     this._store.select(authActions.selectUser)
       .pipe(takeUntil(this.destroy$))
       .subscribe(
@@ -61,6 +63,8 @@ export class HomeComponent extends BaseComponent implements OnInit {
   }
 
   onCreateNewTeam(): void {
+    // why not to load it only when we need CreateNewTeamPopupComponent?
+    // why not to use it in effects?
     const dialogRef = this._dialog.open(CreateNewTeamPopupComponent, {
       width: '400px',
       disableClose: true,

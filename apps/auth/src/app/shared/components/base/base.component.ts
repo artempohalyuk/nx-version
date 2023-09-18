@@ -6,6 +6,8 @@ import { Subject } from "rxjs";
   template: ``,
   standalone: true
 })
+// it is duplicated in auth and manager
+// better move it to a separate package
 export class BaseComponent implements OnDestroy {
   destroy$ = new Subject<void>();
  

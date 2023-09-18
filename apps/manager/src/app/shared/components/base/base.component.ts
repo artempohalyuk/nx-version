@@ -5,6 +5,8 @@ import { Subject } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
+// it is duplicated in auth and manager
+// better move it to a separate package
 export abstract class BaseComponent implements OnDestroy {
   destroy$ = new Subject<void>();
  
