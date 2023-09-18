@@ -14,6 +14,7 @@ const loadUserTeam = createEffect((
         ofType(userTeamActions.loadUserTeam.type),
         switchMap(() => userTeamService.getUserTeam()),
         map((userTeam: IUserTeam) => userTeamActions.loadUserTeamSuccess({userTeam}))
+        // What will happen if call fails?
     ), { functional: true }
 )
 
@@ -24,6 +25,10 @@ const createUserTeam = createEffect((
     actions$.pipe(
         ofType(userTeamActions.createUserTeam.type),
         switchMap(({name}) => userTeamService.createUserTeam(name)),
+        // it is better to move "map" and "catchError" inside switchMap
+        // here is an example https://ngrx.io/guide/effects/lifecycle#resubscribe-on-error
+        // problem with the current code it that it will work until first error and everything else will be ignored
+        // https://www.learnrxjs.io/learn-rxjs/operators/error_handling/catch
         map((userTeam: IUserTeam) => userTeamActions.createUserTeamSuccess({userTeam})),
         catchError((error: IHttpErrorResponse) => of(
             userTeamActions.createUserTeamFailure({ error: error.error.error?.statusMessage })
@@ -39,6 +44,7 @@ const addPlayerToUserTeam = createEffect((
         ofType(userTeamActions.addPlayerToUserTeam.type),
         switchMap(({userTeam}) => userTeamService.updateUserTeam(userTeam)),
         map((userTeam: IUserTeam) => userTeamActions.updateUserTeamSuccess({userTeam}))
+       // What will happen if call fails?
     ), { functional: true }
 )
 

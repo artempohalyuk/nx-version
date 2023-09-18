@@ -1,4 +1,7 @@
+
+// class is not used
 export class CookieHelper {
+  // if we have a static method why not to convert it to util function?
     static getCookieValue(key: string): string | undefined {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {

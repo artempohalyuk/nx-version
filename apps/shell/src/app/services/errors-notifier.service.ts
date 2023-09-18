@@ -8,6 +8,7 @@ import { IHttpErrorResponse } from '../models';
 @Injectable({
   providedIn: 'root',
 })
+// if we want to use this service somewhere else we need move it to a package
 export class ErrorsNotifierService {
   private error$ = new Subject<IHttpErrorResponse>();
 

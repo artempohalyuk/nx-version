@@ -3,6 +3,8 @@ import { createReducer, on } from "@ngrx/store";
 import * as authActions from './index';
 import { IAuthState } from "./auth-state.model";
 
+// you can get a try new Feature Creators https://ngrx.io/guide/store/feature-creators
+
 export const initialAuthState: IAuthState = {
     user: null,
     isLoading: false,

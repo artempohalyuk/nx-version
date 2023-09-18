@@ -26,6 +26,7 @@
 
         <ng-template #activePlayersListTemplate>
           <ng-container *ngIf="activePlayers$ | async as activePlayers">
+            <!-- Try to move filters and pagination to store (it can be saved separately from  activePlayers$ state) and perform the filtering in selectors -->
             <div *ngFor="let player of activePlayers | nameFilter: searchTerm | positionFilter: selectedPosition | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
               class="bg-white rounded-lg shadow-md p-4 mb-4">
               <div class="flex items-center justify-between mb-2">

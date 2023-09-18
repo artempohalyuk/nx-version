@@ -13,6 +13,7 @@ import { SidebarNewsItemComponent } from './sidebar-news-item';
   standalone: true,
   imports: [SidebarNewsItemComponent, CommonModule, MatProgressSpinnerModule]
 })
+// WHY we have it as shared if that is used only in one place
 export class SidebarNewsComponent {
   @Input() newsLoading!: boolean | null;
   @Input() newsList: INews[] | null = [];

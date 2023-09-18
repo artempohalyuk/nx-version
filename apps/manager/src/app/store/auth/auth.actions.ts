@@ -1,6 +1,7 @@
 import { IUser } from "@models";
 import { createAction, props } from "@ngrx/store";
 
+// better to use Action Groups https://ngrx.io/guide/store/action-groups
 export const loadUser = createAction('[Auth] Load User');
 
 export const loadUserSuccess = createAction(

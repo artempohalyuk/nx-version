@@ -14,6 +14,7 @@ export class NameFilterPipe implements PipeTransform {
 
     const filteredPlayers = players.filter(player => {
       const fullName = `${player.firstName} ${player.lastName}`.toLowerCase();
+      // searchTerm.toLowerCase() is performed for each item in the array
       return fullName.includes(searchTerm.toLowerCase());
     });
 

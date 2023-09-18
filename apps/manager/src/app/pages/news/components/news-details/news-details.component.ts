@@ -27,6 +27,7 @@ import * as newsActions from '@store/news';
 })
 export class NewsDetailsComponent implements OnInit {
     newsDetails$: Observable<INews | null> = this._store.select(newsActions.selectNewsDetails);
+    // looks like it is not used
     newsDetailsLoader$: Observable<boolean> = this._store.select(newsActions.selectNewsDetailsLoading);
 
     constructor(
