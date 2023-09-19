@@ -1,62 +1,24 @@
 import { IPlayer, IUserTeam } from "@models";
-import { createAction, props } from "@ngrx/store";
+import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
-export const loadUserTeam = createAction('[Team] Load');
+export const UserTeamApiActions = createActionGroup({
+    source: 'User Team API',
+    events: {
+        'User Team Load': emptyProps(),
+        'User Team Load Success': props<{ userTeam: IUserTeam }>(),
+        'User Team Create': props<{ name: string }>(),
+        'User Team Create Success': props<{ userTeam: IUserTeam }>(),
+        'User Team Create Failure': props<{ error: string | undefined }>(),
+        'User Team Update Success': props<{ userTeam: IUserTeam }>(),
+        'User Team Remove': emptyProps(),
+        'User Team Remove Success': props<{ status: boolean }>(),
+    }
+})
 
-export const loadUserTeamSuccess = createAction(
-    `${loadUserTeam.type} Success`,
-    props<{
-        userTeam: IUserTeam;
-    }>()
-);
-
-export const createUserTeam = createAction(
-    '[Team] Create Team',
-    props<{
-        name: string
-    }>()
-);
-
-export const createUserTeamSuccess = createAction(
-    `${createUserTeam.type} Success`,
-    props<{
-        userTeam: IUserTeam;
-    }>()
-);
-
-export const createUserTeamFailure = createAction(
-    `${createUserTeam.type} Failure`,
-    props<{
-        error: string | undefined;
-    }>()
-);
-
-export const updateUserTeamSuccess = createAction(
-    '[Team] Update Success',
-    props<{
-        userTeam: IUserTeam;
-    }>()
-);
-
-export const removeUserTeam = createAction('[Team] Remove Team');
-
-export const removeUserTeamSuccess = createAction(
-    `${removeUserTeam.type} Success`,
-    props<{
-        status: boolean;
-    }>()
-);
-
-export const addPlayerToUserTeam = createAction(
-    '[Team] Add Player',
-    props<{
-        userTeam: IUserTeam;
-    }>()
-);
-
-export const removePlayerFromUserTeam = createAction(
-    '[Team] Remove Player',
-    props<{
-        userTeam: IUserTeam;
-    }>()
-);
+export const UserTeamActions = createActionGroup({
+    source: 'User Team',
+    events: {
+        'User Team Add Player': props<{ player: IPlayer }>(),
+        'User Team Remove Player': props<{ player: IPlayer }>(),
+    }
+})

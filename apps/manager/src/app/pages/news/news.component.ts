@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { INews } from '@models';
-import * as newsActions from '@store/news';
+import { NewsApiActions, newsFeature } from '@store/news';
 
 @Component({
   selector: 'nx-news',
@@ -33,15 +33,15 @@ import * as newsActions from '@store/news';
 export class NewsComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 6;
-  newsList$: Observable<INews[]> = this._store.select(newsActions.selectNewsList);
-  newsLoader$: Observable<boolean> = this._store.select(newsActions.selectNewsLoading);
+  newsList$: Observable<INews[]> = this._store.select(newsFeature.selectNews);
+  newsLoader$: Observable<boolean> = this._store.select(newsFeature.selectNewsLoading);
 
   constructor(
     private _store: Store
   ) { }
 
   ngOnInit() {
-    this._store.dispatch(newsActions.loadNews());
+    this._store.dispatch(NewsApiActions.newsLoad());
   }
 
   public onPageChange(page: number): void {

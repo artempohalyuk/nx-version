@@ -1,23 +1,24 @@
 import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
-import * as authActions from './index';
+import { catchError, map, of, switchMap } from "rxjs";
+import { Router } from "@angular/router";
+
 import { UserService } from "src/app/services";
 import { IUser } from "@models";
-import { catchError, map, of, switchMap } from "rxjs";
 import { StorageHelper } from "src/app/utils";
 import { StorageKey } from "src/app/shared";
-import { Router } from "@angular/router";
+import { AuthActions, AuthApiActions } from "./auth.actions";
 
 const loadUser = createEffect((
     actions$ = inject(Actions),
     userService = inject(UserService)
 ) => 
     actions$.pipe(
-        ofType(authActions.loadUser.type),
+        ofType(AuthApiActions.userLoad),
         switchMap(() => userService.getCurrentUser()),
-        map((user: IUser) => authActions.loadUserSuccess({user})),
-        catchError((error) => of(authActions.loadUserFailure(error)))
+        map((user: IUser) => AuthApiActions.userLoadSuccess({user})),
+        catchError((error) => of(AuthApiActions.userLoadFailure(error)))
     ),
     { functional: true }
 )
@@ -27,7 +28,7 @@ const logout = createEffect((
     router = inject(Router)
 ) => 
     actions$.pipe(
-        ofType(authActions.userLogout.type),
+        ofType(AuthActions.userLogout),
         map(() => {
             StorageHelper.setItem(localStorage, StorageKey.Token, null);
             router.navigate(['/auth']);

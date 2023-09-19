@@ -18,8 +18,8 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
-  errors!: { email: string, password: string } | null;
-  isLoading!: boolean;
+  errors: { email: string, password: string } | null = null;
+  isLoading = false;
 
   get email() {
     return this.loginForm.get('email');

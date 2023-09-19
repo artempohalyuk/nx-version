@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
 import { HeaderComponent } from './core/components';
-import * as authActions from '@store/auth';
+import { authFeature } from '@store/auth';
 
 @Component({
   selector: 'nx-root',
@@ -20,7 +20,7 @@ import * as authActions from '@store/auth';
   ]
 })
 export class AppComponent {
-  user$ = this._store.select(authActions.selectUser);
+  user$ = this._store.select(authFeature.selectUser);
   isLoading!: boolean;
 
   constructor(

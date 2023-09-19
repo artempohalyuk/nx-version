@@ -1,7 +1,7 @@
-import { createReducer, on } from "@ngrx/store";
+import { createFeature, createReducer, on } from "@ngrx/store";
 
-import * as newsActions from './index';
 import { INewsState } from "./news-state.model";
+import { NewsApiActions, NewsDetailsApiActions } from "./news.actions";
 
 export const initialNewsState: INewsState = {
     news: [],
@@ -10,28 +10,28 @@ export const initialNewsState: INewsState = {
     newsDetailsLoading: false
 };
 
-export const newsReducer = createReducer<INewsState>(
+const newsReducer = createReducer<INewsState>(
     initialNewsState,
-    on(newsActions.loadNews, (state) => {
+    on(NewsApiActions.newsLoad, (state) => {
         return {
             ...state,
             newsLoading: true
         };
     }),
-    on(newsActions.loadNewsSuccess, (state, { news }) => {
+    on(NewsApiActions.newsLoadSuccess, (state, { news }) => {
         return {
             ...state,
             newsLoading: false,
             news
         };
     }),
-    on(newsActions.loadNewsDetails, (state) => {
+    on(NewsDetailsApiActions.newsDetailsLoad, (state) => {
         return {
             ...state,
             newsDetailsLoading: true,
         };
     }),
-    on(newsActions.loadNewsDetailsSuccess, (state, { newsDetails }) => {
+    on(NewsDetailsApiActions.newsDetailsLoadSuccess, (state, { newsDetails }) => {
         return {
             ...state,
             newsDetails,
@@ -39,3 +39,8 @@ export const newsReducer = createReducer<INewsState>(
         };
     }),
 );
+
+export const newsFeature = createFeature({
+    name: 'news',
+    reducer: newsReducer
+})

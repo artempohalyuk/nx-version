@@ -9,9 +9,9 @@ import { Store } from '@ngrx/store';
 
 import { INews, IUserTeam } from '@models';
 import { BaseComponent, CreateNewTeamPopupComponent, SidebarNewsComponent } from 'src/app/shared/components';
-import * as newsActions from '@store/news';
-import * as userTeamActions from '@store/user-team';
-import * as authActions from '@store/auth';
+import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
+import { NewsApiActions, newsFeature } from '@store/news';
+import { authFeature } from '@store/auth';
 
 @Component({
   selector: 'nx-home',
@@ -32,10 +32,10 @@ import * as authActions from '@store/auth';
   `]
 })
 export class HomeComponent extends BaseComponent implements OnInit {
-  userTeam$: Observable<IUserTeam | null> = this._store.select(userTeamActions.selectUserTeam);
-  userTeamLoading$: Observable<boolean> = this._store.select(userTeamActions.selectUserTeamLoading);
-  newsList$: Observable<INews[]> = this._store.select(newsActions.selectNewsList);
-  newsLoading$: Observable<boolean> = this._store.select(newsActions.selectNewsLoading);
+  userTeam$: Observable<IUserTeam | null> = this._store.select(userTeamFeature.selectUserTeam);
+  userTeamLoading$: Observable<boolean> = this._store.select(userTeamFeature.selectIsLoading);
+  newsList$: Observable<INews[]> = this._store.select(newsFeature.selectNews);
+  newsLoading$: Observable<boolean> = this._store.select(newsFeature.selectNewsLoading);
 
 
   constructor(
@@ -48,13 +48,13 @@ export class HomeComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._store.dispatch(newsActions.loadNews());
-    this._store.select(authActions.selectUser)
+    this._store.dispatch(NewsApiActions.newsLoad());
+    this._store.select(authFeature.selectUser)
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (user) => {
           if (user?.id) {
-            this._store.dispatch(userTeamActions.loadUserTeam());
+            this._store.dispatch(UserTeamApiActions.userTeamLoad());
           }
         }
       )

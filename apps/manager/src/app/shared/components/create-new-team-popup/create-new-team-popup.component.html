@@ -12,14 +12,14 @@
       <label for="teamName" class="block mb-2">Team Name</label>
       <input id="teamName"
         class="border border-gray-300 rounded-md px-4 py-2 w-full"
-        [class.border-red-500]="newUserTeamForm.get('name')?.invalid && errorMessage"
+        [class.border-red-500]="newUserTeamForm.get('name')?.invalid && (errorMessage$ | async)"
         type="text"
         formControlName="name"
         name="teamName">
 
-        <p *ngIf="newUserTeamForm.get('name')?.invalid && errorMessage"
+        <p *ngIf="(errorMessage$ | async) && newUserTeamForm.get('name')?.invalid"
           class="mt-2 text-red-500 text-sm">
-          {{ errorMessage }}
+          {{ errorMessage$ | async }}
         </p>
     </div>
     <div class="flex justify-end">

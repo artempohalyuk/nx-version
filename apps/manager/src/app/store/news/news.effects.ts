@@ -1,19 +1,20 @@
 import { inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
-import * as newsActions from './index';
+import { map, switchMap } from "rxjs";
+
 import { NewsService } from "src/app/services";
 import { INews } from "@models";
-import { map, switchMap } from "rxjs";
+import { NewsApiActions, NewsDetailsApiActions } from "./news.actions";
 
 const loadNews = createEffect((
     actions$ = inject(Actions),
     newsService = inject(NewsService)
 ) => 
     actions$.pipe(
-        ofType(newsActions.loadNews.type),
+        ofType(NewsApiActions.newsLoad.type),
         switchMap(() => newsService.getNews()),
-        map((news: INews[]) => newsActions.loadNewsSuccess({news}))
+        map((news: INews[]) => NewsApiActions.newsLoadSuccess({news}))
     ), { functional: true }
 )
 
@@ -22,9 +23,9 @@ const loadNewsDetails = createEffect((
     newsService = inject(NewsService)
 ) => 
     actions$.pipe(
-        ofType(newsActions.loadNewsDetails.type),
+        ofType(NewsDetailsApiActions.newsDetailsLoad.type),
         switchMap(({newsId}) => newsService.getNewsDetails(newsId)),
-        map((newsDetails: INews) => newsActions.loadNewsDetailsSuccess({newsDetails}))
+        map((newsDetails: INews) => NewsDetailsApiActions.newsDetailsLoadSuccess({newsDetails}))
     ), { functional: true }
 )
 

@@ -1,22 +1,22 @@
-import { createReducer, on } from "@ngrx/store";
+import { createFeature, createReducer, on } from "@ngrx/store";
 
-import * as playersActions from './index';
 import { IPlayersState } from "./players-state.model";
+import { PlayersApiActions } from "./players.actions";
 
 export const initialPlayersState: IPlayersState = {
     players: [],
     isLoading: false
 };
 
-export const playersReducer = createReducer<IPlayersState>(
+const playersReducer = createReducer<IPlayersState>(
     initialPlayersState,
-    on(playersActions.loadPlayers, (state) => {
+    on(PlayersApiActions.playersLoad, (state) => {
         return {
             ...state,
             isLoading: true
         };
     }),
-    on(playersActions.loadPlayersSuccess, (state, { players }) => {
+    on(PlayersApiActions.playersLoadSuccess, (state, { players }) => {
         return {
             ...state,
             isLoading: false,
@@ -24,3 +24,8 @@ export const playersReducer = createReducer<IPlayersState>(
         };
     }),
 );
+
+export const playersFeature = createFeature({
+    name: 'players',
+    reducer: playersReducer
+})

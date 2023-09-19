@@ -1,25 +1,18 @@
 import { IUser } from "@models";
-import { createAction, props } from "@ngrx/store";
+import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
-export const loadUser = createAction('[Auth] Load User');
+export const AuthApiActions = createActionGroup({
+    source: 'Auth API',
+    events: {
+        'User Load': emptyProps(),
+        'User Load Success': props<{ user: IUser }>(),
+        'User Load Failure': props<{ error: string | undefined }>(),
+    }
+})
 
-export const loadUserSuccess = createAction(
-    `${loadUser.type} Success`,
-    props<{
-        user: IUser;
-    }>()
-);
-
-export const loadUserFailure = createAction(
-    `${loadUser.type} Failure`,
-    props<{
-        error: string | undefined;
-    }>()
-);
-
-export const userLogout = createAction(
-    '[Auth] User Logout',
-    props<{
-        user: null;
-    }>()
-);
+export const AuthActions = createActionGroup({
+    source: 'Auth API',
+    events: {
+        'User Logout': props<{ user: null }>(),
+    }
+})

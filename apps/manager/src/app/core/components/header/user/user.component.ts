@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { IUser } from '@models';
-import * as authActions from '@store/auth';
+import { AuthActions, authFeature } from '@store/auth';
+
 
 @Component({
   selector: 'nx-user',
@@ -13,14 +14,14 @@ import * as authActions from '@store/auth';
   imports: [CommonModule]
 })
 export class UserComponent {
-  user$: Observable<IUser | null> = this._store.select(authActions.selectUser);
+  user$: Observable<IUser | null> = this._store.select(authFeature.selectUser);
 
   constructor(
     private _store: Store
   ) { }
 
   logOut(): void {
-    this._store.dispatch(authActions.userLogout({
+    this._store.dispatch(AuthActions.userLogout({
       user: null
     }));
   }

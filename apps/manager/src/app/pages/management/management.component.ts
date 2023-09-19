@@ -2,18 +2,18 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { Observable, takeUntil, tap } from 'rxjs';
+import { Observable, filter, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
 import { IPlayer, IUser, IUserTeam } from '@models';
 import { BaseComponent, CreateNewTeamPopupComponent } from 'src/app/shared/components';
 import { NameFilterPipe, PositionFilterPipe } from './pipes';
-import * as playersActions from '@store/players';
-import * as userTeamActions from '@store/user-team';
-import * as authActions from '@store/auth';
+import { UserTeamApiActions, UserTeamActions, userTeamFeature } from '@store/user-team';
+import { authFeature } from '@store/auth';
+import { PlayersApiActions, playersFeature } from '@store/players';
 
 
 @Component({
@@ -49,18 +49,11 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   searchTerm!: string;
   selectedPosition = '';
   userTeam!: IUserTeam;
-  activePlayers$: Observable<IPlayer[]> = this._store.select(playersActions.selectPlayersList);
-  activePlayersLoading$: Observable<boolean> = this._store.select(playersActions.selectPlayersLoading);
-  userTeam$: Observable<IUserTeam | null> = this._store.pipe(
-    select(userTeamActions.selectUserTeam),
-    tap((userTeam) => {
-      if (userTeam) {
-        this.userTeam = userTeam;
-      }
-    })
-  );
-  userTeamLoading$: Observable<boolean> = this._store.select(userTeamActions.selectUserTeamLoading);
-  user$: Observable<IUser | null> = this._store.select(authActions.selectUser);
+  activePlayers$: Observable<IPlayer[]> = this._store.select(playersFeature.selectPlayers);
+  activePlayersLoading$: Observable<boolean> = this._store.select(playersFeature.selectIsLoading);
+  userTeam$: Observable<IUserTeam | null> = this._store.select(userTeamFeature.selectUserTeam);
+  userTeamLoading$: Observable<boolean> = this._store.select(userTeamFeature.selectIsLoading);
+  user$: Observable<IUser | null> = this._store.select(authFeature.selectUser);
 
   constructor(
     private _dialog: MatDialog,
@@ -70,14 +63,13 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._store.dispatch(playersActions.loadPlayers());
+    this._store.dispatch(PlayersApiActions.playersLoad());
 
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe(
-      (user) => {
-        if (user?.teamId) {
-          this._store.dispatch(userTeamActions.loadUserTeam())
-        }
-      }
+    this.user$.pipe(
+      takeUntil(this.destroy$),
+      filter(user => !!user?.teamId)
+    ).subscribe(
+      () => this._store.dispatch(UserTeamApiActions.userTeamLoad())
     )
   }
 
@@ -90,15 +82,11 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   onAddToTeamClick(player: IPlayer): void {
-    const updatedPlayers = [player, ...this.userTeam.players];
-
-    this._store.dispatch(userTeamActions.addPlayerToUserTeam({userTeam: {...this.userTeam, players: updatedPlayers}}));
+    this._store.dispatch(UserTeamActions.userTeamAddPlayer({player}))
   }
 
   removePlayerFromTeam(player: IPlayer): void {
-    const updatedPlayers = this.userTeam.players.filter(p => p.id !== player.id);
-
-    this._store.dispatch(userTeamActions.removePlayerFromUserTeam({ userTeam: {...this.userTeam, players: updatedPlayers}}));
+    this._store.dispatch(UserTeamActions.userTeamRemovePlayer({player}))
   }
 
   onPageChange(page: number): void {

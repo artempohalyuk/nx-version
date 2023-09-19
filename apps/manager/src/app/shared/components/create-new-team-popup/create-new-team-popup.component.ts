@@ -6,8 +6,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import * as userTeamActions from '@store/user-team';
+
 import { BaseComponent } from '../base';
+import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
 
 @Component({
   selector: 'nx-create-new-team-popup',
@@ -18,8 +19,7 @@ import { BaseComponent } from '../base';
 })
 export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit {
   newUserTeamForm!: FormGroup;
-  errorMessage$: Observable<string | undefined> = this._store.select(userTeamActions.selectUserTeamErrors);
-  errorMessage!: string | undefined;
+  errorMessage$: Observable<string | undefined> = this._store.select(userTeamFeature.selectError);
 
   constructor(
     private _store: Store,
@@ -34,7 +34,7 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]]
     });
 
-    this._store.select(userTeamActions.selectUserTeam)
+    this._store.select(userTeamFeature.selectUserTeam)
       .pipe(
         takeUntil(this.destroy$)
       ).subscribe(
@@ -44,22 +44,17 @@ export class CreateNewTeamPopupComponent extends BaseComponent implements OnInit
           }
       } 
     )
-
-    this._store.select(userTeamActions.selectUserTeamErrors)
-      .pipe(
-        takeUntil(this.destroy$)
-    ).subscribe((error) => this.errorMessage = error)
   }
 
   createTeam(): void {
     const formValue = this.newUserTeamForm.value;
 
     if (!this.newUserTeamForm.valid) {
-      this.errorMessage = "Team Name is required.";
+      this._store.dispatch(UserTeamApiActions.userTeamCreateFailure({ error: "Team Name is required."}))
       return;
     }
   
-    this._store.dispatch(userTeamActions.createUserTeam({name: formValue.name}));
+    this._store.dispatch(UserTeamApiActions.userTeamCreate({name: formValue.name}));
   }
 
   onClosePopup() {

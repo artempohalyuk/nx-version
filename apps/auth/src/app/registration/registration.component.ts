@@ -20,13 +20,13 @@ export class RegistrationComponent{
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
-  errors!: {
+  errors: {
     firstName: { message: string },
     lastName: { message: string },
     email: { message: string },
     password: { message: string }
-  } | null;
-  isLoading!: boolean;
+  } | null = null;
+  isLoading = false;
 
   get firstName() {
     return this.registrationForm.get('firstName');

@@ -1,10 +1,10 @@
 import { IPlayer } from "@models";
-import { createAction, props } from "@ngrx/store";
+import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
-export const loadPlayers = createAction('[Players] Load');
-export const loadPlayersSuccess = createAction(
-    `${loadPlayers.type} Success`,
-    props<{
-        players: IPlayer[];
-    }>()
-);
+export const PlayersApiActions = createActionGroup({
+    source: 'Players API',
+    events: {
+        'Players Load': emptyProps(),
+        'Players Load Success': props<{ players: IPlayer[] }>(),
+    }
+})

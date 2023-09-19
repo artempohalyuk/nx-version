@@ -4,15 +4,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { INews } from '@models';
-import * as newsActions from '@store/news';
+import { NewsDetailsApiActions, newsFeature } from '@store/news';
 
 @Component({
   selector: 'nx-news-details',
   templateUrl: './news-details.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressSpinnerModule],
   styles: [`
     :host {
       display: flex;
@@ -26,8 +27,8 @@ import * as newsActions from '@store/news';
   `]
 })
 export class NewsDetailsComponent implements OnInit {
-    newsDetails$: Observable<INews | null> = this._store.select(newsActions.selectNewsDetails);
-    newsDetailsLoader$: Observable<boolean> = this._store.select(newsActions.selectNewsDetailsLoading);
+    newsDetails$: Observable<INews | null> = this._store.select(newsFeature.selectNewsDetails);
+    newsDetailsLoader$: Observable<boolean> = this._store.select(newsFeature.selectNewsDetailsLoading);
 
     constructor(
       private _store: Store,
@@ -37,7 +38,7 @@ export class NewsDetailsComponent implements OnInit {
     ngOnInit() {
       const newsId = this._activatedRoute.snapshot.paramMap.get('id');
 
-      this._store.dispatch(newsActions.loadNewsDetails({newsId}));
+      this._store.dispatch(NewsDetailsApiActions.newsDetailsLoad({newsId}));
     }
 
 }

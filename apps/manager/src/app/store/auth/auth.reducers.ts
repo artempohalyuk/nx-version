@@ -1,36 +1,36 @@
-import { createReducer, on } from "@ngrx/store";
+import { createFeature, createReducer, on } from "@ngrx/store";
 
-import * as authActions from './index';
 import { IAuthState } from "./auth-state.model";
+import { AuthActions, AuthApiActions } from "./auth.actions";
 
 export const initialAuthState: IAuthState = {
     user: null,
     isLoading: false,
 };
 
-export const authReducer = createReducer<IAuthState>(
+const authReducer = createReducer<IAuthState>(
     initialAuthState,
-    on(authActions.loadUser, (state) => {
+    on(AuthApiActions.userLoad, (state) => {
         return {
             ...state,
             isLoading: true
         };
     }),
-    on(authActions.loadUserSuccess, (state, { user }) => {
+    on(AuthApiActions.userLoadSuccess, (state, { user }) => {
         return {
             ...state,
             isLoading: false,
             user: user
         };
     }),
-    on(authActions.loadUserFailure, (state) => {
+    on(AuthApiActions.userLoadFailure, (state) => {
         return {
             ...state,
             isLoading: false,
             user: null
         };
     }),
-    on(authActions.userLogout, (state, { user }) => {
+    on(AuthActions.userLogout, (state, { user }) => {
         return {
             ...state,
             isLoading: true,
@@ -38,3 +38,8 @@ export const authReducer = createReducer<IAuthState>(
         };
     }),
 );
+
+export const authFeature = createFeature({
+    name: 'auth',
+    reducer: authReducer
+})

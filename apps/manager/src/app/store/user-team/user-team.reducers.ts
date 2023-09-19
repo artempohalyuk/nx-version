@@ -1,8 +1,7 @@
-import { createReducer, on } from "@ngrx/store";
+import { createFeature, createReducer, on } from "@ngrx/store";
 
-import * as userTeamActions from './index';
 import { IUserTeamState } from "./user-team-state.model";
-import { IUserTeam } from "@models";
+import { UserTeamApiActions, UserTeamActions } from "./user-team.actions";
 
 export const initialUserTeamState: IUserTeamState = {
     userTeam: null,
@@ -10,68 +9,82 @@ export const initialUserTeamState: IUserTeamState = {
     error: undefined
 };
 
-export const userTeamReducer = createReducer<IUserTeamState>(
+const userTeamReducer = createReducer<IUserTeamState>(
     initialUserTeamState,
-    on(userTeamActions.loadUserTeam, (state) => {
+    on(UserTeamApiActions.userTeamLoad, (state) => {
         return {
             ...state,
             isLoading: true
         };
     }),
-    on(userTeamActions.loadUserTeamSuccess, (state, { userTeam }) => {
+    on(UserTeamApiActions.userTeamLoadSuccess, (state, { userTeam }) => {
         return {
             ...state,
             isLoading: false,
             userTeam
         };
     }),
-    on(userTeamActions.createUserTeam, (state) => {
+    on(UserTeamApiActions.userTeamCreate, (state) => {
         return {
             ...state,
             isLoading: false,
         };
     }),
-    on(userTeamActions.createUserTeamSuccess, (state, { userTeam }) => {
+    on(UserTeamApiActions.userTeamCreateSuccess, (state, { userTeam }) => {
         return {
             ...state,
             isLoading: false,
             userTeam
         };
     }),
-    on(userTeamActions.createUserTeamFailure, (state, { error }) => {
+    on(UserTeamApiActions.userTeamCreateFailure, (state, { error }) => {
         return {
             ...state,
             isLoading: false,
             error: error
         };
     }),
-    on(userTeamActions.updateUserTeamSuccess, (state, { userTeam }) => {
+    on(UserTeamApiActions.userTeamUpdateSuccess, (state, { userTeam }) => {
         return {
             ...state,
             isLoading: false,
             userTeam
         };
     }),
-    on(userTeamActions.removeUserTeam, (state) => {
+    on(UserTeamApiActions.userTeamRemove, (state) => {
         return {
             ...state,
             isLoading: false,
         };
     }),
-    on(userTeamActions.removeUserTeamSuccess, (state) => {
+    on(UserTeamApiActions.userTeamRemoveSuccess, (state) => {
         return {
             ...state,
             isLoading: false,
         };
     }),
-    on(userTeamActions.addPlayerToUserTeam, (state, { userTeam }) => {
+    on(UserTeamActions.userTeamAddPlayer, (state, { player }) => {
+        let { userTeam } = state;
+        
+        if (userTeam) {
+            userTeam = {...userTeam, players: [player, ...userTeam.players]}
+        }
+
         return {
             ...state,
             isLoading: false,
             userTeam
         };
     }),
-    on(userTeamActions.removePlayerFromUserTeam, (state, { userTeam }) => {
+    on(UserTeamActions.userTeamRemovePlayer, (state, { player }) => {
+        let { userTeam } = state;
+        
+        if (userTeam) {
+            const updatedPlayers = userTeam.players.filter(p => p.id !== player.id)
+
+            userTeam = {...userTeam, players: updatedPlayers}
+        }
+
         return {
             ...state,
             isLoading: false,
@@ -79,3 +92,8 @@ export const userTeamReducer = createReducer<IUserTeamState>(
         };
     }),
 );
+
+export const userTeamFeature = createFeature({
+    name: 'userTeam',
+    reducer: userTeamReducer
+})
