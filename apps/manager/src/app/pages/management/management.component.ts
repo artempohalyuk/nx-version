@@ -9,7 +9,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { Store } from '@ngrx/store';
 
 import { IPlayer, IUser, IUserTeam } from '@models';
-import { BaseComponent, CreateNewTeamPopupComponent } from 'src/app/shared/components';
+import { CreateNewTeamPopupComponent } from '../../shared/components';
+import { BaseComponent } from '@nx/shared/components';
 import { NameFilterPipe, PositionFilterPipe } from './pipes';
 import { UserTeamApiActions, UserTeamActions, userTeamFeature } from '@store/user-team';
 import { authFeature } from '@store/auth';

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { HttpStatus } from '../enums';
-import { IHttpResponse } from '@models';
+import { IHttpResponse } from './http-response.model';
 
 export interface IHttpErrorResponse extends HttpErrorResponse {
   readonly status: HttpStatus;

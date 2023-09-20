@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { INews } from 'src/app/shared/models';
+import { INews } from '../../../models';
 
 @Component({
   selector: 'nx-sidebar-news-item',

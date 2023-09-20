@@ -8,7 +8,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
 import { INews, IUserTeam } from '@models';
-import { BaseComponent, CreateNewTeamPopupComponent, SidebarNewsComponent } from 'src/app/shared/components';
+import { CreateNewTeamPopupComponent, SidebarNewsComponent } from '../../shared/components';
+import { BaseComponent } from '@nx/shared/components';
 import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
 import { NewsApiActions, newsFeature } from '@store/news';
 import { authFeature } from '@store/auth';

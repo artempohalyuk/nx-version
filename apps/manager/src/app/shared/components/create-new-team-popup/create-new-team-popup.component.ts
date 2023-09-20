@@ -6,8 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-
-import { BaseComponent } from '../base';
+import { BaseComponent } from '@nx/shared/components';
 import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
 
 @Component({

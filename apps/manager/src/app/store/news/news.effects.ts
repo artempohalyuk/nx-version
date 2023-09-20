@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import { map, switchMap } from "rxjs";
 
-import { NewsService } from "src/app/services";
+import { NewsService } from "../../services";
 import { INews } from "@models";
 import { NewsApiActions, NewsDetailsApiActions } from "./news.actions";
 

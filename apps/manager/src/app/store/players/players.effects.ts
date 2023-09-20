@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import { map, switchMap } from "rxjs";
 
-import { PlayersService } from "src/app/services";
+import { PlayersService } from "../../services";
 import { IPlayer } from "@models";
 import { PlayersApiActions } from "./players.actions";
 

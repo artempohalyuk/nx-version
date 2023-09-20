@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { IPlayer } from 'src/app/shared/models';
+import { IPlayer } from '../../../shared/models';
 
 @Pipe({
   name: 'positionFilter',

@@ -4,10 +4,12 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, map, of, switchMap, withLatestFrom } from "rxjs";
 
-import { UserTeamService } from "src/app/services";
-import { IHttpErrorResponse, IUserTeam } from "@models";
+
+import { UserTeamService } from "../../services";
+import { IUserTeam } from "@models";
 import { UserTeamApiActions, UserTeamActions } from "./user-team.actions";
 import { userTeamFeature } from "./user-team.reducers";
+import { IHttpErrorResponse } from '@nx/shared/types';
 
 const loadUserTeam = createEffect((
     actions$ = inject(Actions),

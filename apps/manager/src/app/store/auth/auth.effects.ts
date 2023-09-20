@@ -4,10 +4,10 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, map, of, switchMap } from "rxjs";
 import { Router } from "@angular/router";
 
-import { UserService } from "src/app/services";
+import { UserService } from "../../services";
 import { IUser } from "@models";
-import { StorageHelper } from "src/app/utils";
-import { StorageKey } from "src/app/shared";
+import { StorageHelper } from "../../utils";
+import { StorageKey } from "../../shared";
 import { AuthActions, AuthApiActions } from "./auth.actions";
 
 const loadUser = createEffect((

@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { Observable, map } from "rxjs";
 
 import { environment } from "@env";
-import { IHttpResponse } from "../shared/models/http-response.model";
+import { IHttpResponse } from "@nx/shared/types";
 import { IUser } from "../shared/models/user.model";
 
 @Injectable({

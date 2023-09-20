@@ -5,7 +5,7 @@ import { Observable, map } from "rxjs";
 
 import { environment } from "@env";
 import { IPlayer } from "../shared/models/player.model";
-import { IHttpResponse } from "../shared/models/http-response.model";
+import { IHttpResponse } from "@nx/shared/types";
 
 @Injectable({
     providedIn: 'root'

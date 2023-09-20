@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@env';
 import { Observable, map } from 'rxjs';
-import { IHttpResponse } from '@models';
+
+import { environment } from '@env';
 import { ILoginFormData, IRegistrationFormData } from '../models';
+import { IHttpResponse } from '@nx/shared/types';
 
 
 @Injectable({

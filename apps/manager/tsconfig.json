@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "target": "es2022",
     "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
@@ -10,9 +9,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@env": ["src/environments/environment"],
-      "@models": ["src/app/shared/models"],
-      "@store*": ["src/app/store/"],
+      "@env": ["apps/manager/src/environments/environment"],
+      "@models": ["apps/manager/src/app/shared/models"],
+      "@store*": ["apps/manager/src/app/store/"],
+      "@nx/shared/types": ["libs/shared/types/src/index.ts"],
+      "@nx/shared/components": ["libs/shared/components/src/index.ts"]
     },
   },
   "files": [],
