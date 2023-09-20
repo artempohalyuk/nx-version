@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import { map, switchMap } from "rxjs";
 
-import { NewsService } from "../../services";
-import { INews } from "@models";
+import { NewsService } from "../../../../../apps/manager/src/app/services";
+import { INews } from "@nx/shared/types";
 import { NewsApiActions, NewsDetailsApiActions } from "./news.actions";
 
 const loadNews = createEffect((

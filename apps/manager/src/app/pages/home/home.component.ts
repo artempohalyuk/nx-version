@@ -11,7 +11,7 @@ import { INews, IUserTeam } from '@models';
 import { CreateNewTeamPopupComponent, SidebarNewsComponent } from '../../shared/components';
 import { BaseComponent } from '@nx/shared/components';
 import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
-import { NewsApiActions, newsFeature } from '@store/news';
+import { NewsApiActions, newsFeature } from '@nx/shared/store';
 import { authFeature } from '@store/auth';
 
 @Component({

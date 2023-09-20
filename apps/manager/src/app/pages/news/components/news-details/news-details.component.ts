@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { INews } from '@models';
-import { NewsDetailsApiActions, newsFeature } from '@store/news';
+import { NewsDetailsApiActions, newsFeature } from '@nx/shared/store';
 
 @Component({
   selector: 'nx-news-details',

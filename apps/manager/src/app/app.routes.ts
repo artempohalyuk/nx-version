@@ -3,7 +3,7 @@ import { loadRemoteModule } from '@nx/angular/mf';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 
-import { NewsEffects, newsFeature } from './store/news';
+import { NewsEffects, newsFeature } from '@nx/shared/store';
 import { UserTeamEffects, userTeamFeature } from './store/user-team';
 import { PlayersEffects, playersFeature } from './store/players';
 import { AuthEffects, authFeature } from './store/auth';
