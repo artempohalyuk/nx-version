@@ -11,8 +11,7 @@ import { Store } from '@ngrx/store';
 import { IPlayer, IUser, IUserTeam } from '@models';
 import { CreateNewTeamPopupComponent } from '../../shared/components';
 import { BaseComponent } from '@nx/shared/components';
-import { NameFilterPipe, PositionFilterPipe } from './pipes';
-import { UserTeamApiActions, UserTeamActions, userTeamFeature } from '@store/user-team';
+import { UserTeamApiActions, UserTeamActions, userTeamFeature, PlayersActions } from '@store/user-team';
 import { authFeature } from '@store/auth';
 import { PlayersApiActions, playersFeature } from '@store/players';
 
@@ -24,8 +23,6 @@ import { PlayersApiActions, playersFeature } from '@store/players';
   standalone: true,
   imports: [
     NgxPaginationModule,
-    NameFilterPipe,
-    PositionFilterPipe,
     CommonModule,
     FormsModule,
     MatProgressSpinnerModule
@@ -47,11 +44,12 @@ import { PlayersApiActions, playersFeature } from '@store/players';
 export class ManagementComponent extends BaseComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
-  searchTerm!: string;
+  searchPlayers!: string;
   selectedPosition = '';
   userTeam!: IUserTeam;
   activePlayers$: Observable<IPlayer[]> = this._store.select(playersFeature.selectPlayers);
   activePlayersLoading$: Observable<boolean> = this._store.select(playersFeature.selectIsLoading);
+  filteredPlayers$: Observable<IPlayer[]> = this._store.select(playersFeature.selectFilteredPlayers);
   userTeam$: Observable<IUserTeam | null> = this._store.select(userTeamFeature.selectUserTeam);
   userTeamLoading$: Observable<boolean> = this._store.select(userTeamFeature.selectIsLoading);
   user$: Observable<IUser | null> = this._store.select(authFeature.selectUser);
@@ -92,5 +90,13 @@ export class ManagementComponent extends BaseComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.currentPage = page;
+  }
+
+  onSearchChange(value: string): void {
+    this._store.dispatch(PlayersActions.playersFilterByName({search: value}));
+  }
+
+  onPositionChange(value: string): void {
+    this._store.dispatch(PlayersActions.playersFilterByPosition({position: value}));
   }
 }

@@ -4,9 +4,16 @@
     <div class="flex">
       <div class="w-1/2 pr-4">
         <div class="mb-4">
-          <input type="text" placeholder="Search Players" class="w-full px-4 py-2 rounded border border-gray-300" [(ngModel)]="searchTerm">
+          <input 
+            type="text"
+            placeholder="Search Players"
+            class="w-full px-4 py-2 rounded border border-gray-300"
+            [(ngModel)]="searchPlayers"
+            (ngModelChange)="onSearchChange($event)">
         </div>
-        <select class="w-full mb-4 px-4 py-2 rounded border border-gray-300" [(ngModel)]="selectedPosition">
+        <select class="w-full mb-4 px-4 py-2 rounded border border-gray-300" 
+          [(ngModel)]="selectedPosition"
+          (ngModelChange)="onPositionChange($event)">
           <option value="">All Positions</option>
           <option value="PG">Point Guard</option>
           <option value="SG">Shooting Guard</option>
@@ -25,8 +32,8 @@
         </ng-container>
 
         <ng-template #activePlayersListTemplate>
-          <ng-container *ngIf="activePlayers$ | async as activePlayers">
-            <div *ngFor="let player of activePlayers | nameFilter: searchTerm | positionFilter: selectedPosition | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
+          <ng-container *ngIf="filteredPlayers$ | async as filteredPlayers">
+            <div *ngFor="let player of filteredPlayers | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }" 
               class="bg-white rounded-lg shadow-md p-4 mb-4">
               <div class="flex items-center justify-between mb-2">
                 <h3 class="text-lg font-bold">{{ player.firstName }} {{ player.lastName }}</h3>

@@ -5,6 +5,14 @@ export const PlayersApiActions = createActionGroup({
     source: 'Players API',
     events: {
         'Players Load': emptyProps(),
-        'Players Load Success': props<{ players: IPlayer[] }>(),
+        'Players Load Success': props<{ players: IPlayer[] }>()
+    }
+})
+
+export const PlayersActions = createActionGroup({
+    source: 'Players',
+    events: {
+        'Players Filter By Name': props<{ search: string }>(),
+        'Players Filter By Position': props<{ position: string }>()
     }
 })
