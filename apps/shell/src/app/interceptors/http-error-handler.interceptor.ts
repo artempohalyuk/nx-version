@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ErrorsNotifierService } from '../services';
-import { HttpStatus } from '../enums';
+import { ErrorsNotifierService } from '@nx/shared/services';
+import { HttpStatus } from '@nx/shared/types';
 
 
 

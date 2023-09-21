@@ -1,4 +1,4 @@
-import { INews } from "@models";
+import { INews } from "@nx/shared/types";
 
 export interface INewsState {
     news: INews[];

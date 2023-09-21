@@ -8,11 +8,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Store } from '@ngrx/store';
 
-import { IPlayer, IUser, IUserTeam } from '@models';
+import { IPlayer, IUserTeam } from '@models';
 import { CreateNewTeamPopupComponent } from '../../shared/components';
 import { BaseComponent } from '@nx/shared/components';
 import { UserTeamApiActions, UserTeamActions, userTeamFeature, PlayersActions } from '@store/user-team';
-import { authFeature } from '@store/auth';
+import { authFeature } from '@nx/shared/store';
+import { IUser } from '@nx/shared/types';
 import { PlayersApiActions, playersFeature } from '@store/players';
 
 

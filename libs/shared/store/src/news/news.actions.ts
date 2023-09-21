@@ -1,4 +1,4 @@
-import { INews } from "@models";
+import { INews } from "@nx/shared/types";
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
 export const NewsApiActions = createActionGroup({

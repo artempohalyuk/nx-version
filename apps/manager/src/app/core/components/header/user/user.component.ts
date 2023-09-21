@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { IUser } from '@models';
-import { AuthActions, authFeature } from '@store/auth';
+import { IUser } from '@nx/shared/types';
+import { AuthActions, authFeature } from '@nx/shared/store';
 
 
 @Component({

@@ -17,8 +17,9 @@ const loadUserTeam = createEffect((
 ) => 
     actions$.pipe(
         ofType(UserTeamApiActions.userTeamLoad.type),
-        switchMap(() => userTeamService.getUserTeam()),
-        map((userTeam: IUserTeam) => UserTeamApiActions.userTeamLoadSuccess({userTeam}))
+        switchMap(() => userTeamService.getUserTeam().pipe(
+            map((userTeam: IUserTeam) => UserTeamApiActions.userTeamLoadSuccess({userTeam}))
+        )),
     ), { functional: true }
 )
 
@@ -28,11 +29,12 @@ const createUserTeam = createEffect((
 ) => 
     actions$.pipe(
         ofType(UserTeamApiActions.userTeamCreate.type),
-        switchMap(({name}) => userTeamService.createUserTeam(name)),
-        map((userTeam: IUserTeam) => UserTeamApiActions.userTeamCreateSuccess({userTeam})),
-        catchError((error: IHttpErrorResponse) => of(
-            UserTeamApiActions.userTeamCreateFailure({ error: error.error.error?.statusMessage })
-        ))
+        switchMap(({name}) => userTeamService.createUserTeam(name).pipe(
+            map((userTeam: IUserTeam) => UserTeamApiActions.userTeamCreateSuccess({userTeam})),
+            catchError((error: IHttpErrorResponse) => of(
+                UserTeamApiActions.userTeamCreateFailure({ error: error.error.error?.statusMessage })
+            ))
+        )),
     ), { functional: true }
 )
 
@@ -44,8 +46,9 @@ const addPlayerToUserTeam = createEffect((
     actions$.pipe(
         ofType(UserTeamActions.userTeamAddPlayer.type),
         withLatestFrom(store.select(userTeamFeature.selectUserTeam)),
-        switchMap(([action, userTeam]) => userTeamService.updateUserTeam(userTeam!)),
-        map((userTeam: IUserTeam) => UserTeamApiActions.userTeamUpdateSuccess({userTeam}))
+        switchMap(([action, userTeam]) => userTeamService.updateUserTeam(userTeam!).pipe(
+            map((userTeam: IUserTeam) => UserTeamApiActions.userTeamUpdateSuccess({userTeam}))
+        )),
     ), { functional: true }
 )
 
@@ -57,8 +60,9 @@ const removePlayerFromUserTeam = createEffect((
     actions$.pipe(
         ofType(UserTeamActions.userTeamRemovePlayer.type),
         withLatestFrom(store.select(userTeamFeature.selectUserTeam)),
-        switchMap(([action, userTeam]) => userTeamService.updateUserTeam(userTeam!)),
-        map((userTeam: IUserTeam) => UserTeamApiActions.userTeamUpdateSuccess({userTeam}))
+        switchMap(([action, userTeam]) => userTeamService.updateUserTeam(userTeam!).pipe(
+            map((userTeam: IUserTeam) => UserTeamApiActions.userTeamUpdateSuccess({userTeam}))
+        )),
     ), { functional: true }
 )
 
@@ -68,8 +72,9 @@ const removeUserTeam = createEffect((
 ) => 
     actions$.pipe(
         ofType(UserTeamApiActions.userTeamRemove.type),
-        switchMap(() => userTeamService.removeUserTeam()),
-        map((status: boolean) => UserTeamApiActions.userTeamRemoveSuccess({status}))
+        switchMap(() => userTeamService.removeUserTeam().pipe(
+            map((status: boolean) => UserTeamApiActions.userTeamRemoveSuccess({status}))
+        )),
     ), { functional: true }
 )
 

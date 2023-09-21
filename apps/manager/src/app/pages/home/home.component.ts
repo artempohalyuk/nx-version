@@ -2,17 +2,19 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { Observable, takeUntil } from 'rxjs';
+import { Observable, filter, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
-import { INews, IUserTeam } from '@models';
-import { CreateNewTeamPopupComponent, SidebarNewsComponent } from '../../shared/components';
+import { IUserTeam } from '@models';
+import { CreateNewTeamPopupComponent } from '../../shared/components';
 import { BaseComponent } from '@nx/shared/components';
 import { UserTeamApiActions, userTeamFeature } from '@store/user-team';
 import { NewsApiActions, newsFeature } from '@nx/shared/store';
-import { authFeature } from '@store/auth';
+import { authFeature } from '@nx/shared/store';
+import { SidebarNewsComponent } from './components';
+import { INews } from '@nx/shared/types';
 
 @Component({
   selector: 'nx-home',
@@ -51,13 +53,11 @@ export class HomeComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this._store.dispatch(NewsApiActions.newsLoad());
     this._store.select(authFeature.selectUser)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (user) => {
-          if (user?.id) {
-            this._store.dispatch(UserTeamApiActions.userTeamLoad());
-          }
-        }
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(user => !!user?.teamId)
+      ).subscribe(
+        () => this._store.dispatch(UserTeamApiActions.userTeamLoad())
       )
   }
 

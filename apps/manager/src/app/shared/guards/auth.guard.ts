@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 
 import { inject } from '@angular/core';
-import { AuthApiActions, authFeature } from '@store/auth';
+import { AuthApiActions, authFeature } from '@nx/shared/store';
 
 export const AuthGuard: CanActivateFn = () => {
   const router = inject(Router);

@@ -1,16 +1,17 @@
+import { importProvidersFrom } from '@angular/core';
 import { Route } from '@angular/router';
 import { loadRemoteModule } from '@nx/angular/mf';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { MatDialogModule } from '@angular/material/dialog';
 
-import { NewsEffects, newsFeature } from '@nx/shared/store';
+import { NewsEffects, newsFeature, DialogEffects, AuthEffects, authFeature } from '@nx/shared/store';
 import { UserTeamEffects, userTeamFeature } from './store/user-team';
 import { PlayersEffects, playersFeature } from './store/players';
-import { AuthEffects, authFeature } from './store/auth';
-import { importProvidersFrom } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
 import { AuthGuard } from './shared/guards';
 import { AppComponent } from './app.component';
+import { environment } from '@env';
+import { NewsService, UserService } from '@nx/shared/services';
 
 
 export const APP_ROUTES: Route[] = [
@@ -25,7 +26,12 @@ export const APP_ROUTES: Route[] = [
       provideState(authFeature),
       provideState(userTeamFeature),
       provideState(newsFeature),
-      provideEffects(NewsEffects, UserTeamEffects, AuthEffects),
+      provideEffects(NewsEffects, UserTeamEffects, AuthEffects, DialogEffects),
+      UserService,
+      NewsService,
+      {
+        provide: 'API_URL', useValue: environment.apiEndpoint
+      }
     ],
     children: [
       {
@@ -46,7 +52,7 @@ export const APP_ROUTES: Route[] = [
       },
       { 
         path: 'news',
-        loadChildren: () => import('./pages/news/news.routes').then(m => m.NEWS_ROUTES),
+        loadChildren: () => import('@nx/news').then(m => m.NEWS_ROUTES),
       }
     ]
   },

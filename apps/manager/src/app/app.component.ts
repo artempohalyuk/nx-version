@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 
 import { HeaderComponent } from './core/components';
-import { authFeature } from '@store/auth';
+import { authFeature } from '@nx/shared/store';
 
 @Component({
   selector: 'nx-root',

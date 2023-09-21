@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 
 import { map, switchMap } from "rxjs";
 
-import { NewsService } from "../../../../../apps/manager/src/app/services";
+import { NewsService } from "@nx/shared/services";
 import { INews } from "@nx/shared/types";
 import { NewsApiActions, NewsDetailsApiActions } from "./news.actions";
 
@@ -13,8 +13,9 @@ const loadNews = createEffect((
 ) => 
     actions$.pipe(
         ofType(NewsApiActions.newsLoad.type),
-        switchMap(() => newsService.getNews()),
-        map((news: INews[]) => NewsApiActions.newsLoadSuccess({news}))
+        switchMap(() => newsService.getNews().pipe(
+            map((news: INews[]) => NewsApiActions.newsLoadSuccess({news}))
+        )),
     ), { functional: true }
 )
 
@@ -24,8 +25,9 @@ const loadNewsDetails = createEffect((
 ) => 
     actions$.pipe(
         ofType(NewsDetailsApiActions.newsDetailsLoad.type),
-        switchMap(({newsId}) => newsService.getNewsDetails(newsId)),
-        map((newsDetails: INews) => NewsDetailsApiActions.newsDetailsLoadSuccess({newsDetails}))
+        switchMap(({newsId}) => newsService.getNewsDetails(newsId).pipe(
+            map((newsDetails: INews) => NewsDetailsApiActions.newsDetailsLoadSuccess({newsDetails}))
+        )),
     ), { functional: true }
 )
 

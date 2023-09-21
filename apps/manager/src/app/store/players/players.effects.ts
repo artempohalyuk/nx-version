@@ -13,8 +13,9 @@ const loadPlayers = createEffect((
 ) => 
     actions$.pipe(
         ofType(PlayersApiActions.playersLoad.type),
-        switchMap(() => playersService.getActivePlayers()),
-        map((players: IPlayer[]) => PlayersApiActions.playersLoadSuccess({players}))
+        switchMap(() => playersService.getActivePlayers().pipe(
+            map((players: IPlayer[]) => PlayersApiActions.playersLoadSuccess({players}))
+        )),
     ), { functional: true }
 )
 

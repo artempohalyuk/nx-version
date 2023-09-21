@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ErrorsNotifierService } from './services';
+import { ErrorsNotifierService } from '@nx/shared/services';
 
 @Component({
   selector: 'nx-root',
