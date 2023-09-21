@@ -56,7 +56,7 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   user$: Observable<IUser | null> = this._store.select(authFeature.selectUser);
 
   constructor(
-    private _dialog: MatDialog,
+    public dialog: MatDialog,
     private _store: Store,
   ) {
     super();
@@ -74,7 +74,7 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   onCreateNewTeam(): void {
-    this._dialog.open(CreateNewTeamPopupComponent, {
+    this.dialog.open(CreateNewTeamPopupComponent, {
       width: '400px',
       disableClose: true,
       autoFocus: true
