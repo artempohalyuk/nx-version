@@ -1,58 +1,58 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ManagementComponent } from "./management.component";
-import { Store, StoreModule } from "@ngrx/store";
-import { PlayersApiActions, UserTeamActions, UserTeamApiActions, playersFeature, userTeamFeature } from "../../store";
+import { PlayersApiActions, UserTeamActions, UserTeamApiActions } from "../../store";
 import { IPlayer } from "@models";
 import { CreateNewTeamPopupComponent } from "../../shared/components";
 import { MatDialogModule } from "@angular/material/dialog";
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { of } from "rxjs";
 import { IUser } from "@nx/shared/types";
+import { authFeature } from "@nx/shared/store";
 
 describe('ManagementComponent', () => {
     let component: ManagementComponent;
     let fixture: ComponentFixture<ManagementComponent>;
-    let store: Store;
-
-    beforeEach(async () => {
-        TestBed.configureTestingModule({
-            imports: [
-                ManagementComponent,
-                MatDialogModule,
-                StoreModule.forRoot(),
-                StoreModule.forFeature(userTeamFeature),
-                StoreModule.forFeature(playersFeature)
-            ],
-            providers: [
-                provideMockStore({ initialState: {} })
-            ]
-        }).compileComponents();
-    });
+    let store: MockStore;
+    const mockUser: IUser = {
+        firstName: "Artem",
+        lastName: "Artem",
+        email: "bla@bla.bla",
+        teamId: '123',
+        id: '1'
+    }
 
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                MatDialogModule,
+            ],
+            providers: [
+                provideMockStore()
+            ]
+        });
+
         fixture = TestBed.createComponent(ManagementComponent);
         component = fixture.componentInstance;
         store = TestBed.inject(MockStore);
+        store.overrideSelector(
+            authFeature.selectUser,
+            mockUser
+        )
+        jest.spyOn(store, 'dispatch');
         fixture.detectChanges();
     });
 
     it('should dispatch PlayersApiActions.playersLoad()', () => {
-        jest.spyOn(store, 'dispatch');
         component.ngOnInit();
         expect(store.dispatch).toHaveBeenCalledWith(PlayersApiActions.playersLoad());
     });
 
     it('should dispatch UserTeamApiActions.userTeamLoad()', () => {
-        component.user$ = of({teamId: '111'} as IUser);
-        jest.spyOn(store, 'dispatch');
         component.ngOnInit();
         expect(store.dispatch).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
     });
 
     it('should add players to the team ', () => {
         const player = {} as IPlayer;
-
-        jest.spyOn(store, 'dispatch');
 
         component.onAddToTeamClick(player);
         expect(store.dispatch).toHaveBeenCalledWith(UserTeamActions.userTeamAddPlayer({player}));
