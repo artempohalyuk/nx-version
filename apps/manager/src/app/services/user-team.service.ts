@@ -11,7 +11,7 @@ import { IUserTeam } from "../shared/models/user-team.model";
     providedIn: 'root'
 })
 export class UserTeamService {
-    private _apiEndpoint = environment.apiEndpoint;
+    readonly _apiEndpoint = environment.apiEndpoint;
 
     constructor(
         private _http: HttpClient
