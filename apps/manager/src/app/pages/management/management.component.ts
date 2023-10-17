@@ -47,7 +47,6 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   itemsPerPage = 5;
   searchPlayers!: string;
   selectedPosition = '';
-  userTeam!: IUserTeam;
   activePlayers$: Observable<IPlayer[]> = this._store.select(playersFeature.selectPlayers);
   activePlayersLoading$: Observable<boolean> = this._store.select(playersFeature.selectIsLoading);
   filteredPlayers$: Observable<IPlayer[]> = this._store.select(playersFeature.selectFilteredPlayers);
