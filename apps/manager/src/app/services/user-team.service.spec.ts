@@ -10,6 +10,7 @@ describe('UserTeamService', () => {
     let httpTestingController: HttpTestingController;
 
     beforeEach(() => {
+        // Do we really need a TestBed to test a service? 
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [UserTeamService],
@@ -55,6 +56,7 @@ describe('UserTeamService', () => {
             userTeamService.getUserTeam().subscribe({
                 next: () => fail('should have failed'),
                 error: (error: IHttpErrorResponse) => {
+                    // async test without done();
                     expect(error).toEqual(errorResponse);
                 },
                 complete: done()

@@ -168,4 +168,11 @@ describe('UserTeamEffects', () => {
 
     expect(UserTeamEffects.removeUserTeam(actions$, userTeamServiceSpy)).toBeObservable(expected);
   });
+
+  // no timing or sequence test
+
+  // not all methods are covered by tests
+
+  // only one negative test
+
 })

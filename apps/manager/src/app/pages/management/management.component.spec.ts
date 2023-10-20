@@ -27,6 +27,7 @@ describe('ManagementComponent', () => {
         fixture = TestBed.createComponent(ManagementComponent);
         component = fixture.componentInstance;
         store = TestBed.inject(MockStore);
+        // what if we need to change something in test? How we can replace a selector for example? 
         fixture.detectChanges();
     });
 
@@ -141,6 +142,7 @@ describe('ManagementComponent', () => {
     });
 
     it('should load user team if teamId exist', async () => {
+        // why we need to spy on subscribe if it is never called
         jest.spyOn(component.user$, 'subscribe');
         fixture.detectChanges();
         await fixture.whenStable();

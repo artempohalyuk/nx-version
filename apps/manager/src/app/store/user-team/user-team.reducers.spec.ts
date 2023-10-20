@@ -14,6 +14,7 @@ describe('UserTeamReducer', () => {
         const initialState = { ...initialUserTeamState, isLoading: false };
         const state = userTeamFeature.reducer(initialState, UserTeamApiActions.userTeamLoad);
 
+        // what if code just toggles value? Have you checked all the cases?
         expect(state).toEqual({
             ...initialUserTeamState,
             isLoading: true,
@@ -35,6 +36,7 @@ describe('UserTeamReducer', () => {
         expect(state.isLoading).toBe(false);
     });
 
+    // Duplicate? 
     it('should set isLoading to true on userTeamCreate action', () => {
         const initialState = { ...initialUserTeamState, isLoading: false };
         const state = userTeamFeature.reducer(initialState, UserTeamApiActions.userTeamLoad);
@@ -112,6 +114,8 @@ describe('UserTeamReducer', () => {
         const playerToAdd = { id: '1' } as IPlayer;
         const mockUserTeamData = {
             id: '1',
+            // where we test that order is correct? 
+            // what if it replaces whole team with one player?
             players: [],
             name: 'Mock Team Name'
         };
@@ -155,4 +159,6 @@ describe('UserTeamReducer', () => {
         expect(state.userTeam?.players).toStrictEqual(updatedPlayers);
         expect(state.isLoading).toBe(true);
     });
+
+    // where do we test rest of the methods? 
 })

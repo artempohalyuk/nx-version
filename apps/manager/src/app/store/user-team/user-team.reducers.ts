@@ -44,6 +44,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
             error: error
         };
     }),
+    // where is init action? 
     on(UserTeamApiActions.userTeamUpdateSuccess, (state, { userTeam }) => {
         return {
             ...state,
@@ -51,15 +52,18 @@ const userTeamReducer = createReducer<IUserTeamState>(
             userTeam
         };
     }),
+    // what is the difference between userTeamRemove and userTeamRemoveSuccess? 
     on(UserTeamApiActions.userTeamRemove, (state) => {
         return {
             ...state,
+            // where we set it to false?             
             isLoading: true,
         };
     }),
     on(UserTeamApiActions.userTeamRemoveSuccess, (state) => {
         return {
             ...state,
+            // where we actually remove the team? 
             isLoading: false,
         };
     }),
@@ -72,6 +76,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
 
         return {
             ...state,
+            // where we set it to false?             
             isLoading: true,
             userTeam
         };
