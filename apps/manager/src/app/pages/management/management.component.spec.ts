@@ -37,17 +37,23 @@ describe('ManagementComponent', () => {
             authFeature.selectUser,
             mockUser
         )
+        // why we always spy on dispatch? Do we need that in all tests
         jest.spyOn(store, 'dispatch');
+        // what if we need to change something in test? How we can replace a selector for example? 
         fixture.detectChanges();
     });
 
     it('should dispatch PlayersApiActions.playersLoad()', () => {
         component.ngOnInit();
+        // how do we know that this was called from this particular call to ngOnInit and not from fixture.detectChanges? 
+        // is that required that call to dispatch is made from ngOnInit or when component is initialized? 
         expect(store.dispatch).toHaveBeenCalledWith(PlayersApiActions.playersLoad());
     });
 
     it('should dispatch UserTeamApiActions.userTeamLoad()', () => {
         component.ngOnInit();
+        // how do we know that this was called from this particular call to ngOnInit and not from fixture.detectChanges? 
+        // is that required that call to dispatch is made from ngOnInit or when component is initialized? 
         expect(store.dispatch).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
     });
 
@@ -81,6 +87,7 @@ describe('ManagementComponent', () => {
     });
 
     it('should load user team if teamId exist', async () => {
+        // why we need to spy on subscribe if it is never called
         jest.spyOn(component.user$, 'subscribe');
         fixture.detectChanges();
         await fixture.whenStable();

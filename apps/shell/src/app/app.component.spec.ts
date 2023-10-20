@@ -39,4 +39,6 @@ describe('AppComponent', () => {
       'Welcome shell'
     );
   }));
+
+  // Why those tests are not removed? 
 });

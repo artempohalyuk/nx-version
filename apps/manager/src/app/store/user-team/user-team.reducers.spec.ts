@@ -12,9 +12,11 @@ describe('UserTeamReducer', () => {
 
     it('should set isLoading to true on userTeamLoad action', () => {
         const initialState = { ...initialUserTeamState, isLoading: false };
+        // why we need to create this const? 
         const userTeamLoadAction = UserTeamApiActions.userTeamLoad;
         const state = userTeamFeature.reducer(initialState, userTeamLoadAction);
     
+        // what if code just toggles value? Have you checked all the cases? 
         expect(state.isLoading).toBe(true);
     });
 
@@ -36,6 +38,8 @@ describe('UserTeamReducer', () => {
         const playerToAdd = {} as IPlayer;
         const mockUserTeamData = {
             id: '1',
+            // where we test that order is correct? 
+            // what if it replaces whole team with one player?
             players: [],
             name: 'Mock Team Name'
         };
@@ -51,4 +55,6 @@ describe('UserTeamReducer', () => {
         expect(state.userTeam?.players).toStrictEqual(updatedPlayers);
         expect(state.isLoading).toBe(false);
     });
+
+    // where do we test rest of the methods? 
 })

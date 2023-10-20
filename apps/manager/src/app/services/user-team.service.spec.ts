@@ -9,6 +9,7 @@ describe('UserTeamService', () => {
     let httpTestingController: HttpTestingController;
 
     beforeEach(() => {
+        // Do we really need a TestBed to test a service? 
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [UserTeamService],
@@ -26,7 +27,9 @@ describe('UserTeamService', () => {
         let expectedTeam: IUserTeam;
 
         beforeEach(() => {
+            // why we need a second copy? 
             userTeamService = TestBed.inject(UserTeamService);
+            // why not to create is just like a constant? 
             expectedTeam = {
                 id: '1',
                 players: [],
@@ -37,6 +40,7 @@ describe('UserTeamService', () => {
         it('should return an userTeam object on successful getUserTeam', () => {         
             userTeamService.getUserTeam().subscribe((team) => {
               expect(team).toEqual(expectedTeam);
+              // async test without done();
             });
           
             const req = httpTestingController.expectOne(`${userTeamService._apiEndpoint}/teams/load`);
@@ -58,6 +62,7 @@ describe('UserTeamService', () => {
             userTeamService.getUserTeam().subscribe({
                 next: () => fail('should have failed'),
                 error: (error: IHttpErrorResponse) => {
+                    // async test without done();
                     expect(error).toEqual(errorResponse);
                 }
             });
@@ -67,4 +72,6 @@ describe('UserTeamService', () => {
             req.flush(errorResponse);
           });
     })
+
+    // What about other methods? 
 });

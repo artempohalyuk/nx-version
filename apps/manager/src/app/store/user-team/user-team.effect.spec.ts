@@ -19,6 +19,7 @@ describe('UserTeamEffects', () => {
   };
 
   beforeEach(() => {
+    // Do we really need to create a testing module? 
     TestBed.configureTestingModule({
       providers: [
         {
@@ -34,7 +35,9 @@ describe('UserTeamEffects', () => {
       ]
     })
 
+    // why not to use it as a const that is provided above? 
     userTeamService = TestBed.inject(UserTeamService);
+     // it is used only in one test. Why do we need to create it before each test? 
     store = TestBed.inject(MockStore);
   })
 
@@ -84,9 +87,20 @@ describe('UserTeamEffects', () => {
 
     userTeamService.updateUserTeam = jest.fn(() => of(mockUserTeam));
 
+    // where we test the call param? 
+    // where we mock store selector? 
+
     UserTeamEffects.addPlayerToUserTeam(addPlayerToUserTeamAction$, userTeamService, store).subscribe((result) => {
+      // here we test that team is still empty? 
       expect(result).toEqual(UserTeamApiActions.userTeamUpdateSuccess({ userTeam: mockUserTeam }));
       done();
     });
   });
+
+  // no timing or sequence test
+
+  // not all methods are covered by tests
+
+  // only one negative test
+
 })
