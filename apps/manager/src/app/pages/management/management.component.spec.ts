@@ -139,4 +139,11 @@ describe('ManagementComponent', () => {
             mockConfig
         );
     });
+
+    it('should load user team if teamId exist', async () => {
+        jest.spyOn(component.user$, 'subscribe');
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(store.dispatch).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
+    });
 })
