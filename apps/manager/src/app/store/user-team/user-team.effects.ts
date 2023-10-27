@@ -4,7 +4,6 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, map, of, switchMap, withLatestFrom } from "rxjs";
 
-
 import { UserTeamService } from "../../services";
 import { IUserTeam } from "@models";
 import { UserTeamApiActions, UserTeamActions } from "./user-team.actions";

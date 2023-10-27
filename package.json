@@ -18,6 +18,7 @@
     "@ngrx/effects": "^16.2.0",
     "@ngrx/store": "^16.2.0",
     "@nx/angular": "16.6.0",
+    "jest-marbles": "^3.0.3",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

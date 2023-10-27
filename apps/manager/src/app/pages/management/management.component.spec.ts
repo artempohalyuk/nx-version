@@ -1,24 +1,18 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ManagementComponent } from "./management.component";
-import { PlayersApiActions, UserTeamActions, UserTeamApiActions } from "../../store";
+import { PlayersActions, PlayersApiActions, UserTeamActions, UserTeamApiActions } from "../../store";
 import { IPlayer } from "@models";
 import { CreateNewTeamPopupComponent } from "../../shared/components";
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { IUser } from "@nx/shared/types";
 import { authFeature } from "@nx/shared/store";
+import { of } from "rxjs";
 
 describe('ManagementComponent', () => {
     let component: ManagementComponent;
     let fixture: ComponentFixture<ManagementComponent>;
     let store: MockStore;
-    const mockUser: IUser = {
-        firstName: "Artem",
-        lastName: "Artem",
-        email: "bla@bla.bla",
-        teamId: '123',
-        id: '1'
-    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -33,29 +27,76 @@ describe('ManagementComponent', () => {
         fixture = TestBed.createComponent(ManagementComponent);
         component = fixture.componentInstance;
         store = TestBed.inject(MockStore);
-        store.overrideSelector(
-            authFeature.selectUser,
-            mockUser
-        )
-        jest.spyOn(store, 'dispatch');
         fixture.detectChanges();
     });
 
-    it('should dispatch PlayersApiActions.playersLoad()', () => {
-        component.ngOnInit();
-        expect(store.dispatch).toHaveBeenCalledWith(PlayersApiActions.playersLoad());
-    });
+    describe('ngOnInit', () => {
+        it('should dispatch PlayersApiActions.playersLoad()', () => {
+            const action = PlayersApiActions.playersLoad();
+            const spy = jest.spyOn(store, 'dispatch');
 
-    it('should dispatch UserTeamApiActions.userTeamLoad()', () => {
-        component.ngOnInit();
-        expect(store.dispatch).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
-    });
+            component.ngOnInit();
+
+            expect(spy).toHaveBeenCalledWith(action);
+        });
+    
+        it('should load user team if teamId exist', () => {
+            const mockUser: IUser = {
+                firstName: "Artem",
+                lastName: "Artem",
+                email: "bla@bla.bla",
+                teamId: '123',
+                id: '1'
+            }
+            const spy = jest.spyOn(store, 'dispatch');
+    
+            store.overrideSelector(
+                authFeature.selectUser,
+                mockUser
+            )
+    
+            component.ngOnInit();
+    
+            expect(spy).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
+        });
+    
+        it('should not load user team if teamId not exist', () => {
+            const mockUser: IUser = {
+                firstName: "Artem",
+                lastName: "Artem",
+                email: "bla@bla.bla",
+                teamId: '',
+                id: '1'
+            }
+            const spy = jest.spyOn(store, 'dispatch');
+    
+            store.overrideSelector(
+                authFeature.selectUser,
+                mockUser
+            )
+    
+            component.ngOnInit();
+    
+            expect(spy).not.toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
+        });
+    })
 
     it('should add players to the team ', () => {
         const player = {} as IPlayer;
+        const action = UserTeamActions.userTeamAddPlayer({player});
+        const spy = jest.spyOn(store, 'dispatch');
 
         component.onAddToTeamClick(player);
-        expect(store.dispatch).toHaveBeenCalledWith(UserTeamActions.userTeamAddPlayer({player}));
+        expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('should remove player from the team ', () => {
+        const player = { id: '1' } as IPlayer;
+        const action = UserTeamActions.userTeamRemovePlayer({player});
+        const spy = jest.spyOn(store, 'dispatch');
+
+        component.removePlayerFromTeam(player);
+        expect(spy).toHaveBeenCalledWith(action);
     });
 
     it('should change current page', () => {
@@ -65,25 +106,37 @@ describe('ManagementComponent', () => {
         expect(component.currentPage).toEqual(page);
     });
 
+    it('should dispatch PlayersActions.playersFilterByName on search change', () => {
+        const search = 'John';
+        const action = PlayersActions.playersFilterByName({search});
+        const spy = jest.spyOn(store, 'dispatch');
+
+        component.onSearchChange(search);
+        expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('should dispatch PlayersActions.playersFilterByName on search change', () => {
+        const position = 'PG';
+        const action = PlayersActions.playersFilterByPosition({position});
+        const spy = jest.spyOn(store, 'dispatch');
+
+        component.onPositionChange(position);
+        expect(spy).toHaveBeenCalledWith(action);
+    });
+
     it('should open CreateNewTeamPopupComponent dialog', () => {
+        const matDialog = TestBed.inject(MatDialog);
+        const spy = jest.spyOn(matDialog, 'open');
         const mockConfig = {
             width: '400px',
             disableClose: true,
             autoFocus: true
         };
 
-        jest.spyOn(component.dialog, 'open');
         component.onCreateNewTeam();
-        expect(component.dialog.open).toHaveBeenCalledWith(
+        expect(spy).toHaveBeenCalledWith(
             CreateNewTeamPopupComponent,
             mockConfig
         );
-    });
-
-    it('should load user team if teamId exist', async () => {
-        jest.spyOn(component.user$, 'subscribe');
-        fixture.detectChanges();
-        await fixture.whenStable();
-        expect(store.dispatch).toHaveBeenCalledWith(UserTeamApiActions.userTeamLoad());
     });
 })

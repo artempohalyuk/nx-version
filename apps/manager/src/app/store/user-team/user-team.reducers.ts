@@ -27,7 +27,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
     on(UserTeamApiActions.userTeamCreate, (state) => {
         return {
             ...state,
-            isLoading: false,
+            isLoading: true,
         };
     }),
     on(UserTeamApiActions.userTeamCreateSuccess, (state, { userTeam }) => {
@@ -54,7 +54,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
     on(UserTeamApiActions.userTeamRemove, (state) => {
         return {
             ...state,
-            isLoading: false,
+            isLoading: true,
         };
     }),
     on(UserTeamApiActions.userTeamRemoveSuccess, (state) => {
@@ -72,7 +72,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
 
         return {
             ...state,
-            isLoading: false,
+            isLoading: true,
             userTeam
         };
     }),
@@ -87,7 +87,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
 
         return {
             ...state,
-            isLoading: false,
+            isLoading: true,
             userTeam
         };
     }),
