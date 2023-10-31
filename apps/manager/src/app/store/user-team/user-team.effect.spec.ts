@@ -39,12 +39,14 @@ describe('UserTeamEffects', () => {
     }
   
     TestBed.configureTestingModule({
+      // why we need to provide it here?
       providers: [
         {
           provide: UserTeamService,
           useValue: userTeamServiceSpy,
         },
         provideMockStore(mockStore),
+        // why we need to provide it here?
         provideMockActions(() => actions$)
       ]
     })
@@ -77,6 +79,7 @@ describe('UserTeamEffects', () => {
   it('should handle multiple userTeamLoad actions', () => {
     const action = UserTeamApiActions.userTeamLoad();
     const outcome = UserTeamApiActions.userTeamLoadSuccess({ userTeam: mockUserTeam });
+    // What is the difference between cold and hot?
     actions$ = hot('-a--b', { a: action, b: action });
     const expected = cold('-c--d', { c: outcome, d: outcome });
 
@@ -170,9 +173,4 @@ describe('UserTeamEffects', () => {
   });
 
   // no timing or sequence test
-
-  // not all methods are covered by tests
-
-  // only one negative test
-
 })

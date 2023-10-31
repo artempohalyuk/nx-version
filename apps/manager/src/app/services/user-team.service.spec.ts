@@ -56,7 +56,6 @@ describe('UserTeamService', () => {
             userTeamService.getUserTeam().subscribe({
                 next: () => fail('should have failed'),
                 error: (error: IHttpErrorResponse) => {
-                    // async test without done();
                     expect(error).toEqual(errorResponse);
                 },
                 complete: done()
@@ -111,6 +110,7 @@ describe('UserTeamService', () => {
         }
         const playerIds: string[] = userTeam.players.map(player => player.id);
         userTeamService.updateUserTeam(userTeam).subscribe((team) => {
+          // testing that userTeam is same probably is not the best testing case
           expect(team).toEqual(userTeam);
           done();
         });

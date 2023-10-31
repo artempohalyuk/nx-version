@@ -36,9 +36,10 @@ describe('UserTeamReducer', () => {
         expect(state.isLoading).toBe(false);
     });
 
-    // Duplicate? 
+
     it('should set isLoading to true on userTeamCreate action', () => {
         const initialState = { ...initialUserTeamState, isLoading: false };
+        // incorrect action most likely
         const state = userTeamFeature.reducer(initialState, UserTeamApiActions.userTeamLoad);
 
         expect(state).toEqual({
@@ -159,6 +160,4 @@ describe('UserTeamReducer', () => {
         expect(state.userTeam?.players).toStrictEqual(updatedPlayers);
         expect(state.isLoading).toBe(true);
     });
-
-    // where do we test rest of the methods? 
 })

@@ -66,8 +66,6 @@ export class ManagementComponent extends BaseComponent implements OnInit {
 
     this.user$.pipe(
       takeUntil(this.destroy$),
-      // there is no test for negative scenario
-      // there is no test when what will happen is team is created later
       filter(user => !!user?.teamId)
     ).subscribe(
       () => this._store.dispatch(UserTeamApiActions.userTeamLoad())
@@ -87,7 +85,6 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   removePlayerFromTeam(player: IPlayer): void {
-    // is not tested
     this._store.dispatch(UserTeamActions.userTeamRemovePlayer({player}))
   }
 
@@ -96,12 +93,10 @@ export class ManagementComponent extends BaseComponent implements OnInit {
   }
 
   onSearchChange(value: string): void {
-    // is not tested
     this._store.dispatch(PlayersActions.playersFilterByName({search: value}));
   }
 
   onPositionChange(value: string): void {
-    // is not tested
     this._store.dispatch(PlayersActions.playersFilterByPosition({position: value}));
   }
 }
