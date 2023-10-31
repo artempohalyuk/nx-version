@@ -51,9 +51,10 @@ const userTeamReducer = createReducer<IUserTeamState>(
             userTeam
         };
     }),
+    // where we actually remove player from store? 
     on(UserTeamApiActions.userTeamRemove, (state) => {
         return {
-            ...state,
+            ...state,    
             isLoading: true,
         };
     }),
@@ -71,7 +72,7 @@ const userTeamReducer = createReducer<IUserTeamState>(
         }
 
         return {
-            ...state,
+            ...state,        
             isLoading: true,
             userTeam
         };

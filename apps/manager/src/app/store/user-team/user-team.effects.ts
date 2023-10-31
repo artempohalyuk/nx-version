@@ -16,9 +16,11 @@ const loadUserTeam = createEffect((
 ) => 
     actions$.pipe(
         ofType(UserTeamApiActions.userTeamLoad.type),
+        // it is good to test what will happen in case if second action is dispatched while request is processing
         switchMap(() => userTeamService.getUserTeam().pipe(
             map((userTeam: IUserTeam) => UserTeamApiActions.userTeamLoadSuccess({userTeam}))
         )),
+        // it is good to test what will happen if first request fails and after that we have another action
     ), { functional: true }
 )
 

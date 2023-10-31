@@ -10,6 +10,7 @@ describe('UserTeamService', () => {
     let httpTestingController: HttpTestingController;
 
     beforeEach(() => {
+        // Do we really need a TestBed to test a service? 
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [UserTeamService],
@@ -109,6 +110,7 @@ describe('UserTeamService', () => {
         }
         const playerIds: string[] = userTeam.players.map(player => player.id);
         userTeamService.updateUserTeam(userTeam).subscribe((team) => {
+          // testing that userTeam is same probably is not the best testing case
           expect(team).toEqual(userTeam);
           done();
         });
